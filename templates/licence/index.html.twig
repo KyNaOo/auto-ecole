@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Licence index{% endblock %}
+
+{% block body %}
+    <h1>Licence index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codemoniteur</th>
+                <th>Codecategorie</th>
+                <th>Dateobtention</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for licence in licences %}
+            <tr>
+                <td>{{ licence.id }}</td>
+                <td>{{ licence.codemoniteur }}</td>
+                <td>{{ licence.codecategorie }}</td>
+                <td>{{ licence.dateobtention ? licence.dateobtention|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_licence_show', {'id': licence.id}) }}">show</a>
+                    <a href="{{ path('app_licence_edit', {'id': licence.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_licence_new') }}">Create new</a>
+{% endblock %}
