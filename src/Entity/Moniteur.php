@@ -14,9 +14,6 @@ class Moniteur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $codemoniteur = null;
-
     #[ORM\Column(length: 50)]
     private ?string $nommoniteur = null;
 
@@ -44,18 +41,6 @@ class Moniteur
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCodemoniteur(): ?int
-    {
-        return $this->codemoniteur;
-    }
-
-    public function setCodemoniteur(int $codemoniteur): self
-    {
-        $this->codemoniteur = $codemoniteur;
-
-        return $this;
     }
 
     public function getNommoniteur(): ?string
