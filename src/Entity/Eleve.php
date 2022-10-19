@@ -14,9 +14,6 @@ class Eleve
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $ideleve = null;
-
     #[ORM\Column(length: 50)]
     private ?string $nomeleve = null;
 
@@ -44,18 +41,6 @@ class Eleve
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdeleve(): ?int
-    {
-        return $this->ideleve;
-    }
-
-    public function setIdeleve(int $ideleve): self
-    {
-        $this->ideleve = $ideleve;
-
-        return $this;
     }
 
     public function getNomeleve(): ?string
