@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moniteur index{% endblock %}
+
+{% block body %}
+    <h1>Moniteur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nommoniteur</th>
+                <th>Prenommoniteur</th>
+                <th>Sexemoniteur</th>
+                <th>Maissancemoniteur</th>
+                <th>Adressemoniteur</th>
+                <th>Codepostalemoniteur</th>
+                <th>Villemoniteur</th>
+                <th>Telephonemoniteur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for moniteur in moniteurs %}
+            <tr>
+                <td>{{ moniteur.id }}</td>
+                <td>{{ moniteur.nommoniteur }}</td>
+                <td>{{ moniteur.prenommoniteur }}</td>
+                <td>{{ moniteur.sexemoniteur }}</td>
+                <td>{{ moniteur.maissancemoniteur ? moniteur.maissancemoniteur|date('Y-m-d') : '' }}</td>
+                <td>{{ moniteur.adressemoniteur }}</td>
+                <td>{{ moniteur.codepostalemoniteur }}</td>
+                <td>{{ moniteur.villemoniteur }}</td>
+                <td>{{ moniteur.telephonemoniteur }}</td>
+                <td>
+                    <a href="{{ path('app_moniteur_show', {'id': moniteur.id}) }}">show</a>
+                    <a href="{{ path('app_moniteur_edit', {'id': moniteur.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_moniteur_new') }}">Create new</a>
+{% endblock %}
