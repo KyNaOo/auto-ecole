@@ -14,9 +14,6 @@ class Lecon
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $codelecon = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
@@ -38,18 +35,6 @@ class Lecon
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCodelecon(): ?int
-    {
-        return $this->codelecon;
-    }
-
-    public function setCodelecon(int $codelecon): self
-    {
-        $this->codelecon = $codelecon;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface
