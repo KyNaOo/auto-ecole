@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MoniteurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,14 @@ class Moniteur
 
     #[ORM\Column(length: 12)]
     private ?string $telephonemoniteur = null;
+
+    #[ORM\OneToMany(mappedBy: 'codemoniteur', targetEntity: Licence::class)]
+    private Collection $licences;
+
+    public function __construct()
+    {
+        $this->licences = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,5 +147,39 @@ class Moniteur
         $this->telephonemoniteur = $telephonemoniteur;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Licence>
+     */
+    public function getLicences(): Collection
+    {
+        return $this->licences;
+    }
+
+    public function addLicence(Licence $licence): self
+    {
+        if (!$this->licences->contains($licence)) {
+            $this->licences->add($licence);
+            $licence->setCodemoniteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicence(Licence $licence): self
+    {
+        if ($this->licences->removeElement($licence)) {
+            // set the owning side to null (unless already changed)
+            if ($licence->getCodemoniteur() === $this) {
+                $licence->setCodemoniteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(){
+        return $this->nommoniteur;
     }
 }
