@@ -18,27 +18,16 @@ class Licence
     #[ORM\Column]
     private ?int $codemoniteur = null;
 
-    #[ORM\Column]
-    private ?int $codecategorie = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateobtention = null;
+
+    #[ORM\ManyToOne(inversedBy: 'licences')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $codecategorie = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCodelicence(): ?int
-    {
-        return $this->codelicence;
-    }
-
-    public function setCodelicence(int $codelicence): self
-    {
-        $this->codelicence = $codelicence;
-
-        return $this;
     }
 
     public function getCodemoniteur(): ?int
@@ -53,18 +42,6 @@ class Licence
         return $this;
     }
 
-    public function getCodecategorie(): ?int
-    {
-        return $this->codecategorie;
-    }
-
-    public function setCodecategorie(int $codecategorie): self
-    {
-        $this->codecategorie = $codecategorie;
-
-        return $this;
-    }
-
     public function getDateobtention(): ?\DateTimeInterface
     {
         return $this->dateobtention;
@@ -73,6 +50,18 @@ class Licence
     public function setDateobtention(\DateTimeInterface $dateobtention): self
     {
         $this->dateobtention = $dateobtention;
+
+        return $this;
+    }
+
+    public function getCodecategorie(): ?Categorie
+    {
+        return $this->codecategorie;
+    }
+
+    public function setCodecategorie(?Categorie $codecategorie): self
+    {
+        $this->codecategorie = $codecategorie;
 
         return $this;
     }
