@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EleveRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,14 @@ class Eleve
 
     #[ORM\Column(length: 12)]
     private ?string $telephone = null;
+
+    #[ORM\OneToMany(mappedBy: 'codeeleve', targetEntity: Lecon::class)]
+    private Collection $lecons;
+
+    public function __construct()
+    {
+        $this->lecons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,4 +148,39 @@ class Eleve
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): self
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->setCodeeleve($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): self
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            // set the owning side to null (unless already changed)
+            if ($lecon->getCodeeleve() === $this) {
+                $lecon->setCodeeleve(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(){
+        return $this->nomeleve;
+    }
+
 }

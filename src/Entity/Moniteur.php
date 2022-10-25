@@ -43,9 +43,13 @@ class Moniteur
     #[ORM\OneToMany(mappedBy: 'codemoniteur', targetEntity: Licence::class)]
     private Collection $licences;
 
+    #[ORM\OneToMany(mappedBy: 'codemoniteur', targetEntity: Lecon::class)]
+    private Collection $lecons;
+
     public function __construct()
     {
         $this->licences = new ArrayCollection();
+        $this->lecons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,5 +185,35 @@ class Moniteur
 
     public function __toString(){
         return $this->nommoniteur;
+    }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): self
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->setCodemoniteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): self
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            // set the owning side to null (unless already changed)
+            if ($lecon->getCodemoniteur() === $this) {
+                $lecon->setCodemoniteur(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VehiculeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
@@ -28,6 +30,14 @@ class Vehicule
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $codecategorie = null;
+
+    #[ORM\OneToMany(mappedBy: 'codevehicule', targetEntity: Lecon::class)]
+    private Collection $lecons;
+
+    public function __construct()
+    {
+        $this->lecons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,5 +103,39 @@ class Vehicule
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): self
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->setCodevehicule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): self
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            // set the owning side to null (unless already changed)
+            if ($lecon->getCodevehicule() === $this) {
+                $lecon->setCodevehicule(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString(){
+        return $this->marque;
+    }
+
 
 }

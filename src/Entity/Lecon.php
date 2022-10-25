@@ -21,16 +21,19 @@ class Lecon
     private ?string $heure = null;
 
     #[ORM\Column]
-    private ?int $codemoniteur = null;
-
-    #[ORM\Column]
-    private ?int $codeeleve = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $immatriculation = null;
-
-    #[ORM\Column]
     private ?int $reglee = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lecons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Eleve $codeeleve = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lecons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Moniteur $codemoniteur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'lecons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicule $codevehicule = null;
 
     public function getId(): ?int
     {
@@ -61,42 +64,6 @@ class Lecon
         return $this;
     }
 
-    public function getCodemoniteur(): ?int
-    {
-        return $this->codemoniteur;
-    }
-
-    public function setCodemoniteur(int $codemoniteur): self
-    {
-        $this->codemoniteur = $codemoniteur;
-
-        return $this;
-    }
-
-    public function getCodeeleve(): ?int
-    {
-        return $this->codeeleve;
-    }
-
-    public function setCodeeleve(int $codeeleve): self
-    {
-        $this->codeeleve = $codeeleve;
-
-        return $this;
-    }
-
-    public function getImmatriculation(): ?string
-    {
-        return $this->immatriculation;
-    }
-
-    public function setImmatriculation(string $immatriculation): self
-    {
-        $this->immatriculation = $immatriculation;
-
-        return $this;
-    }
-
     public function getReglee(): ?int
     {
         return $this->reglee;
@@ -105,6 +72,42 @@ class Lecon
     public function setReglee(int $reglee): self
     {
         $this->reglee = $reglee;
+
+        return $this;
+    }
+
+    public function getCodeeleve(): ?Eleve
+    {
+        return $this->codeeleve;
+    }
+
+    public function setCodeeleve(?Eleve $codeeleve): self
+    {
+        $this->codeeleve = $codeeleve;
+
+        return $this;
+    }
+
+    public function getCodemoniteur(): ?Moniteur
+    {
+        return $this->codemoniteur;
+    }
+
+    public function setCodemoniteur(?Moniteur $codemoniteur): self
+    {
+        $this->codemoniteur = $codemoniteur;
+
+        return $this;
+    }
+
+    public function getCodevehicule(): ?Vehicule
+    {
+        return $this->codevehicule;
+    }
+
+    public function setCodevehicule(?Vehicule $codevehicule): self
+    {
+        $this->codevehicule = $codevehicule;
 
         return $this;
     }

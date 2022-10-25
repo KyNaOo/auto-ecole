@@ -16,7 +16,7 @@ class LeconType extends AbstractType
             ->add('heure')
             ->add('codemoniteur')
             ->add('codeeleve')
-            ->add('immatriculation')
+            ->add('codevehicule')
             ->add('reglee')
         ;
     }
