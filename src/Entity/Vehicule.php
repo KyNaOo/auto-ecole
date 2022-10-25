@@ -25,8 +25,9 @@ class Vehicule
     #[ORM\Column]
     private ?int $annee = null;
 
-    #[ORM\Column]
-    private ?int $codecategorie = null;
+    #[ORM\ManyToOne(inversedBy: 'vehicules')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $codecategorie = null;
 
     public function getId(): ?int
     {
@@ -81,15 +82,16 @@ class Vehicule
         return $this;
     }
 
-    public function getCodecategorie(): ?int
+    public function getCodecategorie(): ?Categorie
     {
         return $this->codecategorie;
     }
 
-    public function setCodecategorie(int $codecategorie): self
+    public function setCodecategorie(?Categorie $codecategorie): self
     {
         $this->codecategorie = $codecategorie;
 
         return $this;
     }
+
 }

@@ -24,9 +24,13 @@ class Categorie
     #[ORM\OneToMany(mappedBy: 'codecategorie', targetEntity: Licence::class)]
     private Collection $licences;
 
+    #[ORM\OneToMany(mappedBy: 'codecategorie', targetEntity: Vehicule::class)]
+    private Collection $vehicules;
+
     public function __construct()
     {
         $this->licences = new ArrayCollection();
+        $this->vehicules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,5 +94,35 @@ class Categorie
 
     public function __toString(){
         return $this->libelle;
+    }
+
+    /**
+     * @return Collection<int, Vehicule>
+     */
+    public function getVehicules(): Collection
+    {
+        return $this->vehicules;
+    }
+
+    public function addVehicule(Vehicule $vehicule): self
+    {
+        if (!$this->vehicules->contains($vehicule)) {
+            $this->vehicules->add($vehicule);
+            $vehicule->setCodecategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): self
+    {
+        if ($this->vehicules->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getCodecategorie() === $this) {
+                $vehicule->setCodecategorie(null);
+            }
+        }
+
+        return $this;
     }
 }
