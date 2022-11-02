@@ -43,6 +43,12 @@ class Eleve
     #[ORM\OneToMany(mappedBy: 'codeeleve', targetEntity: Lecon::class)]
     private Collection $lecons;
 
+    #[ORM\Column(length: 40)]
+    private ?string $login = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $mdp = null;
+
     public function __construct()
     {
         $this->lecons = new ArrayCollection();
@@ -181,6 +187,30 @@ class Eleve
 
     public function __toString(){
         return $this->nomeleve;
+    }
+
+    public function getLogin(): ?string
+    {
+        return $this->login;
+    }
+
+    public function setLogin(string $login): self
+    {
+        $this->login = $login;
+
+        return $this;
+    }
+
+    public function getMdp(): ?string
+    {
+        return $this->mdp;
+    }
+
+    public function setMdp(string $mdp): self
+    {
+        $this->mdp = $mdp;
+
+        return $this;
     }
 
 }

@@ -46,6 +46,12 @@ class Moniteur
     #[ORM\OneToMany(mappedBy: 'codemoniteur', targetEntity: Lecon::class)]
     private Collection $lecons;
 
+    #[ORM\Column(length: 30)]
+    private ?string $loginmoni = null;
+
+    #[ORM\Column(length: 40)]
+    private ?string $mdpmoni = null;
+
     public function __construct()
     {
         $this->licences = new ArrayCollection();
@@ -216,4 +222,37 @@ class Moniteur
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getLoginmoni(): ?string
+    {
+        return $this->loginmoni;
+    }
+
+    /**
+     * @param string|null $loginmoni
+     */
+    public function setLoginmoni(?string $loginmoni): void
+    {
+        $this->loginmoni = $loginmoni;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMdpmoni(): ?string
+    {
+        return $this->mdpmoni;
+    }
+
+    /**
+     * @param string|null $mdpmoni
+     */
+    public function setMdpmoni(?string $mdpmoni): void
+    {
+        $this->mdpmoni = $mdpmoni;
+    }
+
 }

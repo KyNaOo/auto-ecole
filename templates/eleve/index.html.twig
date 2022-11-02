@@ -17,6 +17,8 @@
                 <th>Code postale</th>
                 <th>Ville</th>
                 <th>Telephone</th>
+                <th>login</th>
+                <th>mdp</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -32,6 +34,8 @@
                 <td>{{ eleve.codepostale }}</td>
                 <td>{{ eleve.ville }}</td>
                 <td>{{ eleve.telephone }}</td>
+                <td>{{ eleve.login }}</td>
+                <td>{{ eleve.mdp }}</td>
                 <td>
                     <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>
                     <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>

@@ -17,6 +17,8 @@
                 <th>Codepostalemoniteur</th>
                 <th>Villemoniteur</th>
                 <th>Telephonemoniteur</th>
+                <th>loginmoni</th>
+                <th>mdpmoni</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -32,6 +34,8 @@
                 <td>{{ moniteur.codepostalemoniteur }}</td>
                 <td>{{ moniteur.villemoniteur }}</td>
                 <td>{{ moniteur.telephonemoniteur }}</td>
+                <td>{{ moniteur.loginmoni }}</td>
+                <td>{{ moniteur.mdpmoni }}</td>
                 <td>
                     <a href="{{ path('app_moniteur_show', {'id': moniteur.id}) }}">show</a>
                     <a href="{{ path('app_moniteur_edit', {'id': moniteur.id}) }}">edit</a>

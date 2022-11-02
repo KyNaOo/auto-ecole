@@ -22,6 +22,8 @@ class EleveType extends AbstractType
             ->add('codepostale')
             ->add('ville')
             ->add('telephone')
+            ->add('login')
+            ->add('mdp')
         ;
     }
 

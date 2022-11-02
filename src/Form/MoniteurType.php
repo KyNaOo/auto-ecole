@@ -22,6 +22,8 @@ class MoniteurType extends AbstractType
             ->add('codepostalemoniteur')
             ->add('villemoniteur')
             ->add('telephonemoniteur')
+            ->add('loginmoni')
+            ->add('mdpmoni')
         ;
     }
 
