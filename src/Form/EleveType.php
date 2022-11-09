@@ -14,16 +14,16 @@ class EleveType extends AbstractType
     {
         $builder
             ->add('nomeleve')
-            ->add('prenomeleve')
-            ->add('sexeeleve')
+            ->add('prenomeleve',null,['help'=>'Veuillez saisir votre prenom'])
+            ->add('sexeeleve',null,['help'=>'Veuillez saisir votre genre'])
             ->add('datenaissance', DateType::Class, array(
-        'years' => range(date('Y'), date('Y')-100),))
-            ->add('adresse')
-            ->add('codepostale')
-            ->add('ville')
-            ->add('telephone')
-            ->add('login')
-            ->add('mdp')
+        'years' => range(date('Y')-16, date('Y')-100),))
+            ->add('adresse',null,['help'=>'Veuillez saisir votre adresse'])
+            ->add('codepostale',null,['help'=>'Veuillez saisir votre code postale'])
+            ->add('ville',null,['help'=>'Veuillez saisir votre ville'])
+            ->add('telephone',null,['help'=>'Veuillez saisir votre numero de telephone'])
+            ->add('login',null,['help'=>'Veuillez saisir votre login'])
+            ->add('mdp',null,['help'=>'Saisir un mot de passe'])
         ;
     }
 
