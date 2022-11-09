@@ -13,20 +13,32 @@ class VehiculeType extends AbstractType
     {
         $builder
             ->add('immatriculation', null, [
-                'help'=>'Veuillez saisir le numéro de plaque',
-                'label' => 'Immatriculation'])
+                'label' => 'Immatriculation',
+                'attr' => [
+                    'placeholder' => 'Immatriculation'
+                ]
+            ])
 
             ->add('marque', null, [
-                'help'=>'Veuillez saisir la marque',
-                'label' => 'Marque'])
+                'label' => 'Marque',
+                'attr' => [
+                    'placeholder' => 'Marque'
+                ]
+            ])
 
             ->add('modele', null, [
-                'help'=>'Veuillez saisir le model',
-                'label' => 'Modèle'])
+                'label' => 'Modèle',
+                'attr' => [
+                    'placeholder' => 'Modele'
+                ]
+            ])
 
             ->add('annee', null, [
-                'help'=>'Veuillez saisir l\'année',
-                'label' => 'Année'])
+                'label' => 'Année',
+                'attr' => [
+                    'placeholder' => 'Année'
+                ]
+            ])
 
             ->add('codecategorie',null, [
                 'label' => 'Catégorie'])

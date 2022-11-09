@@ -14,42 +14,71 @@ class EleveType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nomeleve')
+            ->add('nomeleve',null,[
+                'label' => 'Prenom',
+                'attr' => [
+                    'placeholder' => 'Nom'
+                ]
+            ])
 
             ->add('prenomeleve',null,[
-                'help'=>'Veuillez saisir votre prenom',
-                'label' => 'Prenom'])
+                'label' => 'Prenom',
+                'attr' => [
+                    'placeholder' => 'Prénom'
+                ]
+            ])
 
             ->add('sexeeleve',null,[
-                'help'=>'Veuillez saisir votre genre',
-                'label' => 'Genre'])
+                'label' => 'Genre',
+                'attr' => [
+                    'placeholder' => 'Genre'
+                ]
+            ])
 
             ->add('datenaissance', DateType::Class, array(
         'years' => range(date('Y')-16, date('Y')-100),))
 
             ->add('adresse',null,[
-                'help'=>'Veuillez saisir votre adresse',
-                'label' => 'Adresse'])
+                'label' => 'Adresse',
+                'attr' => [
+                    'placeholder' => 'Adresse'
+                ]
+            ])
 
             ->add('codepostale',null,[
-                'help'=>'Veuillez saisir votre code postale',
-                'label' => 'Code Postale'])
+                'label' => 'Code Postale',
+                'attr' => [
+                    'placeholder' => 'Code Postale'
+                ]
+            ])
 
             ->add('ville',null,[
-                'help'=>'Veuillez saisir votre ville',
-                'label' => 'Ville'])
+                'label' => 'Ville',
+                'attr' => [
+                    'placeholder' => 'Ville'
+                ]
+            ])
 
             ->add('telephone',null,[
-                'help'=>'Veuillez saisir votre numero de telephone',
-                'label' => 'N° téléphone'])
+                'label' => 'N° téléphone',
+                'attr' => [
+                    'placeholder' => 'Téléphone'
+                ]
+            ])
 
             ->add('login',null,[
-                'help'=>'Veuillez saisir votre login',
-                'label' => 'Identifiant'])
+                'label' => 'Identifiant',
+                'attr' => [
+                    'placeholder' => 'Login'
+                ]
+            ])
 
             ->add('mdp',PasswordType::class,[
-                'help'=>'Saisir un mot de passe',
-                'label' => 'Mot de passe'])
+                'label' => 'Mot de passe',
+                'attr' => [
+                    'placeholder' => 'Mot de passe'
+                ]
+            ])
         ;
     }
 

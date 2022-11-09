@@ -15,46 +15,69 @@ class MoniteurType extends AbstractType
     {
         $builder
             ->add('nommoniteur', null, [
-                'help'=>'Veuillez saisir votre nom',
-                'label' => 'Nom'])
+                'label' => 'Nom',
+                'attr' => [
+                    'placeholder' => 'Nom'
+                ]
+            ])
 
             ->add('prenommoniteur', null, [
-                'help'=>'Veuillez saisir votre prénom',
-                'label' => 'Prenom'])
+                'label' => 'Prenom',
+                'attr' => [
+                    'placeholder' => 'Prenom'
+                ]
+            ])
 
             ->add('sexemoniteur', null, [
-                'help'=>'Veuillez saisir votre genre',
-                'label' => 'Genre'])
+                'label' => 'Genre',
+                'attr' => [
+                    'placeholder' => 'Genre'
+                ]
+            ])
 
             ->add('maissancemoniteur', DateType::Class, array(
                 'years' => range(date('Y')-16, date('Y')-100),
                 'label' => 'Date de naissance'))
 
             ->add('adressemoniteur', null, [
-                'help'=>'Veuillez saisir votre adresse',
-                'label' => 'Adresse'])
+                'label' => 'Adresse',
+                'attr' => [
+                    'placeholder' => 'Adresse'
+                ]
+            ])
 
             ->add('codepostalemoniteur', null, [
-                'help'=>'Veuillez saisir votre code postale',
-                'label' => 'Code Postale'])
+                'label' => 'Code Postale',
+                'attr' => [
+                    'placeholder' => 'Code Postale'
+                ]
+            ])
 
             ->add('villemoniteur', null, [
-                'help'=>'Veuillez saisir votre ville',
-                'label' => 'Ville'])
+                'label' => 'Ville',
+                'attr' => [
+                    'placeholder' => 'Ville'
+                ]
+            ])
 
             ->add('telephonemoniteur', null, [
-                'help'=>'Veuillez saisir votre numéro de téléphone',
-                'label' => 'N° telephone'])
+                'label' => 'N° telephone',
+                'attr' => [
+                    'placeholder' => 'Téléphone'
+                ]
+            ])
 
             ->add('loginmoni', null, [
-                'help'=>'Veuillez renseigner votre identifiant',
-                'label' => 'Identifiant'])
+                'label' => 'Identifiant',
+                'attr' => [
+                    'placeholder' => 'Login'
+                ]
+            ])
 
             ->add('mdpmoni', PasswordType::class, [
-                'help'=>'Veuillez saisir choisir un mot de passe',
                 'label' => 'Mot de passe',
                 'attr' => [
-                    'placeholder' => 'Veuillez saisir choisir un mot de passe'
+                    'placeholder' => 'Mot de passe'
                 ]
             ])
         ;
