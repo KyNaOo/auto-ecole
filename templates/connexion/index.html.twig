@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper {
+        background:cornflowerblue;
+        margin: 1em auto; max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+        border: 5px black solid;
+        border-radius: 10px}
+
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .content{
+        display: flex;
+        flex-direction: column;
+        align-items: center}
+
+    .background{
+        background: linear-gradient(lightblue, lightgreen, lightseagreen );
+        height: 100vh}
+
+    .titre{
+        text-align: center}
+</style>
+
+<div class="background">
+<div class="example-wrapper">
+   <div class="content"><h1 class="titre">Connexion ✅</h1><br>
+    <br>
+       <form method="post" action="{{ path("app_connexion") }}">
+    <label for="login">Votre login : </label>
+    <input type="text" name="login" placeholder="Identifiant" size="20" maxlength="50">
+
+    <label for="pass">Votre mot de passe : </label>
+    <input type="password" name="pass" placeholder="Mot de passe" size="20" maxlength="40">
+    <br>
+           <button type="submit" name="submit"  >Connexion</button>
+       </form>
+       <br>
+    </div>
+    </div>
+
+</div>
+{% endblock %}
