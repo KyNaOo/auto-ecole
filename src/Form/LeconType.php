@@ -14,12 +14,24 @@ class LeconType extends AbstractType
     {
         $builder
             ->add('date', DateType::Class, array(
-                'years' => range(date('Y')-50, date('Y')+50),))
-            ->add('heure')
-            ->add('codemoniteur')
-            ->add('codeeleve')
-            ->add('codevehicule')
-            ->add('reglee')
+                'years' => range(date('Y')-50, date('Y')+50),
+                'label' => 'Date'))
+
+            ->add('heure', null, [
+                'help'=>'Veuillez saisir renseigner une heure'])
+
+            ->add('codemoniteur',null, [
+                'label' => 'Moniteur'])
+
+            ->add('codeeleve',null, [
+                'label' => 'Eleve'])
+
+            ->add('codevehicule',null, [
+                'label' => 'Vehicule'])
+
+            ->add('reglee', null, [
+                'help'=>'Veuillez saisir indiquer le statut de paiement de la lecon',
+                'label' => 'Reglée ?'])
         ;
     }
 

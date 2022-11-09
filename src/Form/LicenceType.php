@@ -13,10 +13,15 @@ class LicenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('codemoniteur')
-            ->add('codecategorie')
+            ->add('codemoniteur',null, [
+                'label' => 'Moniteur'])
+
+            ->add('codecategorie',null, [
+                'label' => 'Catégorie'])
+
             ->add('dateobtention', DateType::Class, array(
-                'years' => range(date('Y'), date('Y')-50),))
+                'years' => range(date('Y'), date('Y')-50),
+                'label' => 'Date d\'obtention'))
         ;
     }
 
