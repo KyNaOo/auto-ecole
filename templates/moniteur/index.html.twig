@@ -8,23 +8,21 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nommoniteur</th>
-                <th>Prenommoniteur</th>
-                <th>Sexemoniteur</th>
-                <th>Maissancemoniteur</th>
-                <th>Adressemoniteur</th>
-                <th>Codepostalemoniteur</th>
-                <th>Villemoniteur</th>
-                <th>Telephonemoniteur</th>
-                <th>loginmoni</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Genre</th>
+                <th>Naissance</th>
+                <th>Adresse</th>
+                <th>Code Postale</th>
+                <th>Ville</th>
+                <th>Téléphone</th>
+                <th>Identifiant</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for moniteur in moniteurs %}
             <tr>
-                <td>{{ moniteur.id }}</td>
                 <td>{{ moniteur.nommoniteur }}</td>
                 <td>{{ moniteur.prenommoniteur }}</td>
                 <td>{{ moniteur.sexemoniteur }}</td>

@@ -8,19 +8,17 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Date</th>
                 <th>Heure</th>
-                <th>Codemoniteur</th>
-                <th>Codeeleve</th>
-                <th>Reglee</th>
+                <th>Moniteur</th>
+                <th>Elève</th>
+                <th>Reglée</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for lecon in lecons %}
             <tr>
-                <td>{{ lecon.id }}</td>
                 <td>{{ lecon.date ? lecon.date|date('Y-m-d') : '' }}</td>
                 <td>{{ lecon.heure }}</td>
                 <td>{{ lecon.codemoniteur }}</td>
