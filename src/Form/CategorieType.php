@@ -16,7 +16,7 @@ class CategorieType extends AbstractType
             'label' => 'Catégorie'])
 
             ->add('prix', null, ['help'=>'Veuillez saisir le prix',
-                'label' => 'Catégorie'])
+                'label' => 'Prix'])
         ;
     }
 

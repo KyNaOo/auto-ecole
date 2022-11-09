@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Eleve;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,27 +29,27 @@ class EleveType extends AbstractType
 
             ->add('adresse',null,[
                 'help'=>'Veuillez saisir votre adresse',
-                'label' => 'Moniteur'])
+                'label' => 'Adresse'])
 
             ->add('codepostale',null,[
                 'help'=>'Veuillez saisir votre code postale',
-                'label' => 'Moniteur'])
+                'label' => 'Code Postale'])
 
             ->add('ville',null,[
                 'help'=>'Veuillez saisir votre ville',
-                'label' => 'Moniteur'])
+                'label' => 'Ville'])
 
             ->add('telephone',null,[
                 'help'=>'Veuillez saisir votre numero de telephone',
-                'label' => 'Moniteur'])
+                'label' => 'N° téléphone'])
 
             ->add('login',null,[
                 'help'=>'Veuillez saisir votre login',
-                'label' => 'Moniteur'])
+                'label' => 'Identifiant'])
 
-            ->add('mdp',null,[
+            ->add('mdp',PasswordType::class,[
                 'help'=>'Saisir un mot de passe',
-                'label' => 'Moniteur'])
+                'label' => 'Mot de passe'])
         ;
     }
 
