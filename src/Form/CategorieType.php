@@ -12,11 +12,19 @@ class CategorieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle', null, ['help'=>'Veuillez saisir le nom de la catégorie',
-            'label' => 'Catégorie'])
+            ->add('libelle', null, [
+            'label' => 'Catégorie',
+                'attr' => [
+                    'placeholder' => 'Veuillez saisir un libelle'
+                ]
+            ])
 
-            ->add('prix', null, ['help'=>'Veuillez saisir le prix',
-                'label' => 'Prix'])
+            ->add('prix', null, [
+                'label' => 'Prix',
+                'attr' => [
+                    'placeholder' => 'Veuillez saisir un prix'
+                ]
+            ])
         ;
     }
 

@@ -18,8 +18,11 @@ class LeconType extends AbstractType
                 'label' => 'Date'))
 
             ->add('heure', null, [
-                'help'=>'Veuillez saisir renseigner une heure',
-                'label' => 'Heure'])
+                'label' => 'Heure',
+                'attr' => [
+                    'placeholder' => 'Veuillez saisir une heure'
+                ]
+            ])
 
             ->add('codemoniteur',null, [
                 'label' => 'Moniteur'])
@@ -31,8 +34,11 @@ class LeconType extends AbstractType
                 'label' => 'Vehicule'])
 
             ->add('reglee', null, [
-                'help'=>'Veuillez saisir indiquer le statut de paiement de la lecon',
-                'label' => 'Reglée ?'])
+                'label' => 'Reglée ?',
+                'attr' => [
+                    'placeholder' => '1 pour regler 0 pour non regler'
+                ]
+            ])
         ;
     }
 
