@@ -18,7 +18,8 @@ class LeconType extends AbstractType
                 'label' => 'Date'))
 
             ->add('heure', null, [
-                'help'=>'Veuillez saisir renseigner une heure'])
+                'help'=>'Veuillez saisir renseigner une heure',
+                'label' => 'Heure'])
 
             ->add('codemoniteur',null, [
                 'label' => 'Moniteur'])

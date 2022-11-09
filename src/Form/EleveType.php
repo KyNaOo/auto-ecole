@@ -14,16 +14,41 @@ class EleveType extends AbstractType
     {
         $builder
             ->add('nomeleve')
-            ->add('prenomeleve',null,['help'=>'Veuillez saisir votre prenom'])
-            ->add('sexeeleve',null,['help'=>'Veuillez saisir votre genre'])
+
+            ->add('prenomeleve',null,[
+                'help'=>'Veuillez saisir votre prenom',
+                'label' => 'Prenom'])
+
+            ->add('sexeeleve',null,[
+                'help'=>'Veuillez saisir votre genre',
+                'label' => 'Genre'])
+
             ->add('datenaissance', DateType::Class, array(
         'years' => range(date('Y')-16, date('Y')-100),))
-            ->add('adresse',null,['help'=>'Veuillez saisir votre adresse'])
-            ->add('codepostale',null,['help'=>'Veuillez saisir votre code postale'])
-            ->add('ville',null,['help'=>'Veuillez saisir votre ville'])
-            ->add('telephone',null,['help'=>'Veuillez saisir votre numero de telephone'])
-            ->add('login',null,['help'=>'Veuillez saisir votre login'])
-            ->add('mdp',null,['help'=>'Saisir un mot de passe'])
+
+            ->add('adresse',null,[
+                'help'=>'Veuillez saisir votre adresse',
+                'label' => 'Moniteur'])
+
+            ->add('codepostale',null,[
+                'help'=>'Veuillez saisir votre code postale',
+                'label' => 'Moniteur'])
+
+            ->add('ville',null,[
+                'help'=>'Veuillez saisir votre ville',
+                'label' => 'Moniteur'])
+
+            ->add('telephone',null,[
+                'help'=>'Veuillez saisir votre numero de telephone',
+                'label' => 'Moniteur'])
+
+            ->add('login',null,[
+                'help'=>'Veuillez saisir votre login',
+                'label' => 'Moniteur'])
+
+            ->add('mdp',null,[
+                'help'=>'Saisir un mot de passe',
+                'label' => 'Moniteur'])
         ;
     }
 
