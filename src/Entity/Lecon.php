@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LeconRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,14 @@ class Lecon
     #[ORM\ManyToOne(inversedBy: 'lecons')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Vehicule $codevehicule = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'lecons')]
+    private Collection $codeuser;
+
+    public function __construct()
+    {
+        $this->codeuser = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,6 +110,30 @@ class Lecon
     public function setCodevehicule(?Vehicule $codevehicule): self
     {
         $this->codevehicule = $codevehicule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getCodeuser(): Collection
+    {
+        return $this->codeuser;
+    }
+
+    public function addCodeuser(User $codeuser): self
+    {
+        if (!$this->codeuser->contains($codeuser)) {
+            $this->codeuser->add($codeuser);
+        }
+
+        return $this;
+    }
+
+    public function removeCodeuser(User $codeuser): self
+    {
+        $this->codeuser->removeElement($codeuser);
 
         return $this;
     }
