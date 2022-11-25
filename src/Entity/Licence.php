@@ -21,6 +21,10 @@ class Licence
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $codecategorie = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licences')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $codeuser = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +62,18 @@ class Licence
     public function setCodemoniteur(?Moniteur $codemoniteur): self
     {
         $this->codemoniteur = $codemoniteur;
+
+        return $this;
+    }
+
+    public function getCodeuser(): ?User
+    {
+        return $this->codeuser;
+    }
+
+    public function setCodeuser(?User $codeuser): self
+    {
+        $this->codeuser = $codeuser;
 
         return $this;
     }

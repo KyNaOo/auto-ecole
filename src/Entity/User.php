@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,6 +29,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $prenom = null;
+
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $sexe = null;
+
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $adresse = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $ville = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $codepostale = null;
+
+    #[ORM\OneToMany(mappedBy: 'codeuser', targetEntity: Licence::class)]
+    private Collection $licences;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $datenaissance = null;
+
+    public function __construct()
+    {
+        $this->licences = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -114,5 +149,131 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(?string $sexe): self
+    {
+        $this->sexe = $sexe;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCodepostale(): ?string
+    {
+        return $this->codepostale;
+    }
+
+    public function setCodepostale(?string $codepostale): self
+    {
+        $this->codepostale = $codepostale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Licence>
+     */
+    public function getLicences(): Collection
+    {
+        return $this->licences;
+    }
+
+    public function addLicence(Licence $licence): self
+    {
+        if (!$this->licences->contains($licence)) {
+            $this->licences->add($licence);
+            $licence->setCodeuser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicence(Licence $licence): self
+    {
+        if ($this->licences->removeElement($licence)) {
+            // set the owning side to null (unless already changed)
+            if ($licence->getCodeuser() === $this) {
+                $licence->setCodeuser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDatenaissance(): ?\DateTimeInterface
+    {
+        return $this->datenaissance;
+    }
+
+    public function setDatenaissance(\DateTimeInterface $datenaissance): self
+    {
+        $this->datenaissance = $datenaissance;
+
+        return $this;
     }
 }
