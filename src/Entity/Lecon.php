@@ -25,14 +25,6 @@ class Lecon
 
     #[ORM\ManyToOne(inversedBy: 'lecons')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Eleve $codeeleve = null;
-
-    #[ORM\ManyToOne(inversedBy: 'lecons')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Moniteur $codemoniteur = null;
-
-    #[ORM\ManyToOne(inversedBy: 'lecons')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Vehicule $codevehicule = null;
 
     public function getId(): ?int

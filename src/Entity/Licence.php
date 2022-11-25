@@ -21,10 +21,6 @@ class Licence
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $codecategorie = null;
 
-    #[ORM\ManyToOne(inversedBy: 'licences')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Moniteur $codemoniteur = null;
-
     public function getId(): ?int
     {
         return $this->id;
