@@ -10,7 +10,7 @@ class User extends Fixture
     public function load(ObjectManager $manager): void
     {
         $user =new \App\Entity\User();
-        $user->setEmail("yacob.tra@gmail.com")->se
+        $user->setEmail("yacob.tra@gmail.com")->setPassword("1234");
 
         $manager->flush();
     }
