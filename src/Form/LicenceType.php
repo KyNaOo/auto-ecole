@@ -13,9 +13,6 @@ class LicenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('codemoniteur',null, [
-                'label' => 'Moniteur'])
-
             ->add('codecategorie',null, [
                 'label' => 'Catégorie'])
 
