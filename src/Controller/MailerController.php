@@ -22,8 +22,8 @@ class MailerController extends AbstractController
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
+            ->subject('Ethan le pti fragile!')
+            ->text('RAAAAK BAM')
             ->html('<p>See Twig integration for better HTML integration!</p>');
         $mailer->send($email);
 
