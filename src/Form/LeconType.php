@@ -24,12 +24,6 @@ class LeconType extends AbstractType
                 ]
             ])
 
-            ->add('codemoniteur',null, [
-                'label' => 'Moniteur'])
-
-            ->add('codeeleve',null, [
-                'label' => 'Eleve'])
-
             ->add('codevehicule',null, [
                 'label' => 'Vehicule'])
 
