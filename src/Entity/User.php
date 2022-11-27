@@ -62,9 +62,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: Lecon::class, mappedBy: 'codeuser')]
+    private Collection $lecons;
+
     public function __construct()
     {
         $this->licences = new ArrayCollection();
+        $this->lecons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,7 +294,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+        return $this;
+    }
+    /**
+     * @return Collection<int, Lecon>
+     */
+    public function getLecons(): Collection
+    {
+        return $this->lecons;
+    }
+
+    public function addLecon(Lecon $lecon): self
+    {
+        if (!$this->lecons->contains($lecon)) {
+            $this->lecons->add($lecon);
+            $lecon->addCodeuser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecon(Lecon $lecon): self
+    {
+        if ($this->lecons->removeElement($lecon)) {
+            $lecon->removeCodeuser($this);
+        }
 
         return $this;
     }
 }
+//Correction conflit
