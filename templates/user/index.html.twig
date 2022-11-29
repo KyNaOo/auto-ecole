@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <h1>BIEVENUE !</h1>
+    {% for message in app.flashes('message') %}
+        <div class="col-xs4">
+            <div class="p-3 my-2 rounded-1 green light-4 text-green text-dark-4">{{ message }}</div>
+        </div>
+    {% endfor %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
+    <div class="grix xs2">
+        <div>Email</div>
+        <div>{{ app.user.email }}</div>
+        <div>Nom</div>
+        <div>blabla</div>
+        <div>Mot de passe</div>
+        <a href="{{ path('app_logout') }}" class="btn shadow-1 rounded-1 blue">Déconnexion</a>
+        <a href="{{ path('app_user_edit') }}" class="btn shadow-1 rounded-1 blue">Modifier le profil</a>
+        <a href="{{ path('app_user_editPass') }}" class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</a>
+    </div>
+{% endblock %}
