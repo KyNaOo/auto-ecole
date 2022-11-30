@@ -43,20 +43,23 @@ class UserController extends AbstractController
     #[Route('/user/edit/pass', name: 'app_user_editPass')]
     public function editUserMDP(\Symfony\Component\HttpFoundation\Request $request,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher): Response
     {
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $user = $this->getUser();
 
-            if($request->request->get('pass')==$request->request->get('pass2')){
-                $user->setPassword($passwordHasher->hashPassword($user, $request->request->get('pass')));
-                $entityManager->flush();
-                $this->addFlash('message','Mot de passe mis à jour avec succès!');
+            if ($request->request->get('pass')||$request->request->get('pass2')) {
+                if ($request->request->get('pass') == $request->request->get('pass2')) {
+                    $user->setPassword($passwordHasher->hashPassword($user, $request->request->get('pass')));
+                    $entityManager->flush();
+                    $this->addFlash('message', 'Mot de passe mis à jour avec succès!');
 
-                return $this->render('user/index.html.twig');
+                    return $this->render('user/index.html.twig');
+                } else {
+                    $this->addFlash('error', 'les deux mots de passe ne sont pas identiques');
+                }
             }else{
-                $this->addFlash('error','les deux mots de passe ne sont pas identiques');
+                $this->addFlash('error', 'Champ vide !');
             }
         }
-
         return $this->render('user/editUserMDP.html.twig', [
             'controller_name' => 'UserController',
         ]);
