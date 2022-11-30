@@ -49,6 +49,7 @@ class UserController extends AbstractController
             if ($request->request->get('pass')||$request->request->get('pass2')) {
                 if ($request->request->get('pass') == $request->request->get('pass2')) {
                     $user->setPassword($passwordHasher->hashPassword($user, $request->request->get('pass')));
+                    $entityManager->persist($user);
                     $entityManager->flush();
                     $this->addFlash('message', 'Mot de passe mis à jour avec succès!');
 
