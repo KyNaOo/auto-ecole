@@ -2,39 +2,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
 <div class="grix xs2">
 
-    <div>Email</div>
     <div>{{ app.user.email }}</div>
-    <div>Mot de passe</div>
-    <form method="post">
-        <div class="form-field">
-            <label for="pass">Nom</label>
-            <input type="text" id="nom" name="nom" class="form-control">
-        </div>
+    {{ form(form) }}
 
-        <div class="form-field">
-            <label for="pass2">Prenom</label>
-            <input type="text" id="prenom" name="prenom" class="form-control">
-        </div>
-
-        <div class="form-field">
-            <label for="pass2">Prenom</label>
-            <input type="text" id="prenom" name="prenom" class="form-control">
-        </div>
-
-        <div class="form-field">
-            <label for="pass2">Prenom</label>
-            <input type="text" id="prenom" name="prenom" class="form-control">
-        </div>
-
-        <div class="form-field">
-            <label for="pass2">Prenom</label>
-            <input type="text" id="prenom" name="prenom" class="form-control">
-        </div>
-
-        <div class="form-field">
-            <label for="pass2">Prenom</label>
-            <input type="text" id="prenom" name="prenom" class="form-control">
-        </div>
 
         <button class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</button>
     </form>
