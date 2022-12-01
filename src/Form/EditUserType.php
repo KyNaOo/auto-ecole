@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +22,6 @@ class EditUserType extends AbstractType
             ->add('ville')
             ->add('codepostale')
             ->add('datenaissance')
-            ->add('lecons')
             ->add('Valider', SubmitType::class)
         ;
     }
@@ -33,3 +33,11 @@ class EditUserType extends AbstractType
         ]);
     }
 }
+//->add('adresse', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
+//    'attr' => [
+//        'class' => 'adresse'
+//    ],
+//    'label_attr' => [
+//        'style' => 'color:red;'
+//    ]
+//])

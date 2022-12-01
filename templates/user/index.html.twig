@@ -15,8 +15,9 @@
         <div>Email</div>
         <div>{{ app.user.email }}</div>
         <div>Nom</div>
-        <div>blabla</div>
-        <div>Mot de passe</div>
+        <div>{{ app.user.nom }}</div>
+        <div>Prénom</div>
+        <div>{{ app.user.prenom }}</div>
         <a href="{{ path('app_logout') }}" class="btn shadow-1 rounded-1 blue">Déconnexion</a>
         <a href="{{ path('app_user_edit') }}" class="btn shadow-1 rounded-1 blue">Modifier le profil</a>
         <a href="{{ path('app_user_editPass') }}" class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</a>
