@@ -34,7 +34,7 @@ class LoginController extends AbstractController
                 case "ROLE_ADMIN":
                     return $this->redirectToRoute('app_admin');
                 case "ROLE_MONITEUR":
-                    return $this->redirectToRoute('');
+                    return $this->redirectToRoute('app_moniteur');
                 case "ROLE_USER":
                     return $this->redirectToRoute('app_user');
             }
