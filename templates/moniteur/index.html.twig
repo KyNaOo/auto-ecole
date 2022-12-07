@@ -3,18 +3,23 @@
 {% block title %}Hello MoniteurController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/ETHAN/PhpstormProjects/AutoEcoleWeb/BST-SIO-G5-2023-AutoEcole-Web/src/Controller/MoniteurController.php'|file_link(0) }}">src/Controller/MoniteurController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/ETHAN/PhpstormProjects/AutoEcoleWeb/BST-SIO-G5-2023-AutoEcole-Web/templates/moniteur/index.html.twig'|file_link(0) }}">templates/moniteur/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <h1>BIENVENUE !</h1>
+    {% for message in app.flashes('message') %}
+        <div class="col-xs4">
+            <div class="p-3 my-2 rounded-1 green light-4 text-green text-dark-4">{{ message }}</div>
+        </div>
+    {% endfor %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
+    <div class="grix xs2">
+        <div>Email</div>
+        <div>{{ app.user.email }}</div>
+        <div>Nom</div>
+        <div>{{ app.user.nom }}</div>
+        <div>Prénom</div>
+        <div>{{ app.user.prenom }}</div>
+        <a href="{{ path('app_logout') }}" class="btn shadow-1 rounded-1 blue">Déconnexion</a>
+        <a href="{{ path('app_moniteur_edit') }}" class="btn shadow-1 rounded-1 blue">Modifier le profil</a>
+        <a href="{{ path('app_moniteur_editPass') }}" class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</a>
+    </div>
 {% endblock %}
