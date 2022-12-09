@@ -99,7 +99,7 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword($user,
-                $form->get('plainPassword')->getData()
+                $form->get('password')->getData()
                 )
             );
             $user->setRoles(['ROLE_MONITEUR']);
@@ -112,8 +112,9 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_main_menu');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('registration/registerMoniteur.html.twig', [
             'registrationForm' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 }
