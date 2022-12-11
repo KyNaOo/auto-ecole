@@ -1,9 +1,15 @@
 <h1>Hi! Please confirm your email!</h1>
-
+<style>
+    .pswd{
+        color: #B0413E;
+        font-weight: bold;
+    }
+</style>
 <p>
     Please confirm your email address by clicking the following link: <br><br>
     <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    Enter this password to login {{ password }} !
+    Enter this password to login <div class="pswd">{{ password }}</div>
+
     This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
 </p>
 
