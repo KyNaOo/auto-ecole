@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Core\SexeChoice;
 use App\Entity\User;
 use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +18,9 @@ class EditUserType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('sexe')
+            ->add('sexe', ChoiceType::class,[
+                'choices'=>SexeChoice::choice
+            ])
             ->add('telephone')
             ->add('adresse')
             ->add('ville')

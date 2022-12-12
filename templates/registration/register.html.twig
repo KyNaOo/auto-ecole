@@ -1,17 +1,41 @@
+{% extends "login/index.html.twig" %}
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
+<!DOCTYPE html>
+<html lang="en" >
+{% block style %}
+    {{ parent() }}
+{% endblock %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Register</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    </head>
+    <body>
+    <!-- partial:index.partial.html -->
+    <div id="login-form-wrap">
+        <h2>Register</h2>
+        <div id="login-form">
+        {{ form_start(registrationForm) }}
+            <p>
+                {{ form_row(registrationForm.email) }}
+            </p>
+            <p>
+                <input type="submit" class="btn" id="login" value="Register">
+            </p>
+            {{ form_end(registrationForm) }}
+        </div>
+        <div id="create-account-wrap">
+            <p>Already a member? <a href="{{ path('login') }}">Login</a><p>
+        </div><!--create-account-wrap-->
+    </div><!--login-form-wrap-->
+    <!-- partial -->
 
-    <h1>Register</h1>
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    </body>
+</html>
         {#  {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}#}
-    <button type="submit" class="btn">Register</button>
-    <a href="{{ path('login') }}">Connexion</a>
-    {{ form_end(registrationForm) }}
 {% endblock %}
