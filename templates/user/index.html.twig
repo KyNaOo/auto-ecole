@@ -1,16 +1,21 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello UserController!{% endblock %}
-
 {% block body %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
+    <nav class="navbar shadow-1 grey dark-4">
+        <a class="navbar-brand">Eleve</a>
+        <!-- Dark menu background hover variant -->
+        <div class="navbar-menu ml-auto hover-bg-dark">
+            <a class="navbar-link active" href="#">Leçon</a>
+            <a class="navbar-link" href="#">Profil</a>
+            <a class="navbar-link" href="#">Stats</a>
+        </div>
+    </nav>
     <h1>BIENVENUE !</h1>
     {% for message in app.flashes('message') %}
         <div class="col-xs4">
             <div class="p-3 my-2 rounded-1 green light-4 text-green text-dark-4">{{ message }}</div>
         </div>
     {% endfor %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
     <div class="grix xs2">
         <div>Email</div>
         <div>{{ app.user.email }}</div>
