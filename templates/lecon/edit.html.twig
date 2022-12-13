@@ -1,8 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
 {% block title %}Edit Lecon{% endblock %}
 
 {% block body %}
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
     <h1>Edit Lecon</h1>
 
     {{ include('lecon/_form.html.twig', {'button_label': 'Update'}) }}

@@ -1,8 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
 {% block title %}New Lecon{% endblock %}
 
 {% block body %}
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
     <h1>Create new Lecon</h1>
 
     {{ include('lecon/_form.html.twig') }}

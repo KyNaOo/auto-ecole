@@ -1,8 +1,9 @@
 {% block body %}
+    {% block navbar %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
     <nav class="navbar shadow-1 grey dark-4">
-        <a class="navbar-brand">Eleve</a>
+        <a class="navbar-brand">{% block role %}Eleve{% endblock %}</a>
         <!-- Dark menu background hover variant -->
         <div class="navbar-menu ml-auto hover-bg-dark">
             <a class="navbar-link active" href="#">Leçon</a>
@@ -10,6 +11,7 @@
             <a class="navbar-link" href="#">Stats</a>
         </div>
     </nav>
+    {% endblock %}
     <h1>BIENVENUE !</h1>
     {% for message in app.flashes('message') %}
         <div class="col-xs4">

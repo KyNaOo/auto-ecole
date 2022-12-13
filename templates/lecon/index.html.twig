@@ -1,9 +1,12 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
 {% block title %}Lecon index{% endblock %}
 
 {% block body %}
-    <h1>Lecon index</h1>
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
+    <h1>Liste de lçeon</h1>
 
     <table class="table">
         <thead>

@@ -1,9 +1,11 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Categorie index{% endblock %}
+{% extends "admin/index.html.twig" %}
+{% block title %}Categories{% endblock %}
 
 {% block body %}
-    <h1>Categorie index</h1>
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
+    <h1>Liste des categories</h1>
 
     <table class="table">
         <thead>

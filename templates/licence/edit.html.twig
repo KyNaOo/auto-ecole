@@ -1,8 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/index.html.twig' %}
 
 {% block title %}Edit Licence{% endblock %}
 
 {% block body %}
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
     <h1>Edit Licence</h1>
 
     {{ include('licence/_form.html.twig', {'button_label': 'Update'}) }}
