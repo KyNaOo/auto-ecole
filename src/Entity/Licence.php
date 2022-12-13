@@ -54,18 +54,6 @@ class Licence
         return $this;
     }
 
-    public function getCodemoniteur(): ?Moniteur
-    {
-        return $this->codemoniteur;
-    }
-
-    public function setCodemoniteur(?Moniteur $codemoniteur): self
-    {
-        $this->codemoniteur = $codemoniteur;
-
-        return $this;
-    }
-
     public function getCodeuser(): ?User
     {
         return $this->codeuser;

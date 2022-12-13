@@ -78,30 +78,6 @@ class Lecon
         return $this;
     }
 
-    public function getCodeeleve(): ?Eleve
-    {
-        return $this->codeeleve;
-    }
-
-    public function setCodeeleve(?Eleve $codeeleve): self
-    {
-        $this->codeeleve = $codeeleve;
-
-        return $this;
-    }
-
-    public function getCodemoniteur(): ?Moniteur
-    {
-        return $this->codemoniteur;
-    }
-
-    public function setCodemoniteur(?Moniteur $codemoniteur): self
-    {
-        $this->codemoniteur = $codemoniteur;
-
-        return $this;
-    }
-
     public function getCodevehicule(): ?Vehicule
     {
         return $this->codevehicule;
