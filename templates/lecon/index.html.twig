@@ -10,8 +10,6 @@
             <tr>
                 <th>Date</th>
                 <th>Heure</th>
-                <th>Moniteur</th>
-                <th>Elève</th>
                 <th>Reglée</th>
                 <th>actions</th>
             </tr>
@@ -21,8 +19,6 @@
             <tr>
                 <td>{{ lecon.date ? lecon.date|date('Y-m-d') : '' }}</td>
                 <td>{{ lecon.heure }}</td>
-                <td>{{ lecon.codemoniteur }}</td>
-                <td>{{ lecon.codeeleve }}</td>
                 <td>{{ lecon.reglee }}</td>
                 <td>
                     <a href="{{ path('app_lecon_show', {'id': lecon.id}) }}">show</a>
