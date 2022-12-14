@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,7 +26,9 @@ class EditUserType extends AbstractType
             ->add('adresse')
             ->add('ville')
             ->add('codepostale')
-            ->add('datenaissance')
+            ->add('datenaissance', DateType::Class, array(
+                'years' => range(date('Y')-100, date('Y')-16),
+                'label' => 'Date'))
             ->add('Valider', SubmitType::class)
         ;
     }
