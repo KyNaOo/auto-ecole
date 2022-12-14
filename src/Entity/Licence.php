@@ -14,15 +14,15 @@ class Licence
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateobtention = null;
 
     #[ORM\ManyToOne(inversedBy: 'licences')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Categorie $codecategorie = null;
 
     #[ORM\ManyToOne(inversedBy: 'licences')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $codeuser = null;
 
     public function getId(): ?int

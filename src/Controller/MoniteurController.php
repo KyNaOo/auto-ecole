@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Licence;
+use App\Entity\User;
+use App\Form\LicenceType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,11 +62,24 @@ class MoniteurController extends AbstractController
         ]);
     }
 
-    #[Route('/moniteur/add/licence', name: 'app_moniteur_add_licence')]
-    public function addLicence(): Response
+    #[Route('/moniteur/addLicence', name: 'app_addLicence')]
+    public function addLicence(\Symfony\Component\HttpFoundation\Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('moniteur/addLicence.html.twig', [
-            'controller_name' => 'MoniteurController',
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $this->getUser()->getUserIdentifier()]);
+       // dd($user->getId());
+        $licence = new Licence();
+        $form = $this->createForm(LicenceType::class, $licence);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($licence);
+            $entityManager->flush();
+            $this->addFlash('message', 'Ajout effectué');
+        }
+
+        return $this->renderForm('moniteur/addLicence.html.twig', [
+            'licence' => $licence,
+            'form' => $form
         ]);
     }
 }
