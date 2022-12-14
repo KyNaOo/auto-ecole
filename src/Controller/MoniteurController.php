@@ -72,6 +72,7 @@ class MoniteurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $licence->setCodeuser($user);
             $entityManager->persist($licence);
             $entityManager->flush();
             $this->addFlash('message', 'Ajout effectué');
