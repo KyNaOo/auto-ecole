@@ -272,9 +272,9 @@
                     <li>
                         <a href="#" class="nav-link" data-toggle="dropdown" data-menu="dashboard"><i class="bi bi-grid-1x2"></i>Leçon</a>
                         <div id="dashboard" class="dropdown-content">
-                            <a href="#">Configuration</a>
-                            <a href="#">Categories</a>
-                            <a href="#">Notifications</a>
+                            <a href="{{ path('app_lecon_new_eleve',{'id': app.user.id}) }}">S'inscrire</a>
+                            <a href="#">Planning</a>
+                            <a href="#">Paiement</a>
                         </div>
                     </li>
                     <li>
