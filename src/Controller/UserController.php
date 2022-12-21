@@ -66,5 +66,24 @@ class UserController extends AbstractController
         // controller can be blank: it will never be called!
         throw new \Exception('Don t forget to activate logout in security.yaml');
     }
+
+
+
+
+
+    //graph
+    #[Route('/user/graph', name: 'app_user_count', methods: ['GET'])]
+    public function countUser(UserRepository $userRepository): Response
+    {
+        $result = $userRepository->blabla();
+
+        //dd($result);
+        return $this->render('user/graph.html.twig', [
+            'result'=>$result
+        ]);
+    }
+
+
+
     //conflit git
 }

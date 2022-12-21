@@ -56,6 +56,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
+
+
+
+    //graph
+    public function blabla()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT c.libelle, COUNT(l.id) as nbLecons
+                FROM lecon l
+                INNER JOIN lecon_user lu on l.id = lu.lecon_id
+                INNER JOIN user u on lu.user_id = u.id
+                INNER JOIN vehicule v on l.codevehicule_id = v.id
+                INNER JOIN categorie c on v.codecategorie_id = c.id
+                WHERE u.id = 1
+                GROUP BY c.libelle";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+//SELECT categorie.libelle, COUNT(lecon.id)
+//FROM lecon
+//INNER JOIN vehicule ON vehicule.id =lecon.codevehicule_id
+//INNER JOIN categorie ON categorie.id = vehicule.codecategorie_id
+//INNER JOIN user ON user.id = lecon.id
+//WHERE user.id = 1
+//GROUP BY categorie.libelle
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
