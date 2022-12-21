@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Core\SexeChoice;
 use App\Entity\Lecon;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,8 +19,8 @@ class LeconType extends AbstractType
                 'years' => range(date('Y')-50, date('Y')+50),
                 'label' => 'Date'))
 
-            ->add('heure', null, [
-                'label' => 'Heure',
+            ->add('heure', ChoiceType::class,[
+                'choices' => SexeChoice::heure,
                 'attr' => [
                     'placeholder' => 'Veuillez saisir une heure'
                 ]
@@ -27,7 +29,8 @@ class LeconType extends AbstractType
             ->add('codevehicule',null, [
                 'label' => 'Vehicule'])
 
-            ->add('reglee', null, [
+            ->add('reglee', ChoiceType::class, [
+                'choices'=>SexeChoice::reglee,
                 'label' => 'Reglée ?',
                 'attr' => [
                     'placeholder' => '1 pour regler 0 pour non regler'
