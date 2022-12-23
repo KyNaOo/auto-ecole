@@ -16,12 +16,6 @@ class Lecon
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
-
-    #[ORM\Column(length: 10)]
-    private ?string $heure = null;
-
     #[ORM\Column]
     private ?int $reglee = null;
 
@@ -31,6 +25,12 @@ class Lecon
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'lecons')]
     private Collection $codeuser;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateEnd = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateStart = null;
 
     public function __construct()
     {
@@ -110,6 +110,30 @@ class Lecon
     public function removeCodeuser(User $codeuser): self
     {
         $this->codeuser->removeElement($codeuser);
+
+        return $this;
+    }
+
+    public function getDateEnd(): ?\DateTimeInterface
+    {
+        return $this->dateEnd;
+    }
+
+    public function setDateEnd(\DateTimeInterface $dateEnd): self
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    public function getDateStart(): ?\DateTimeInterface
+    {
+        return $this->dateStart;
+    }
+
+    public function setDateStart(\DateTimeInterface $dateStart): self
+    {
+        $this->dateStart = $dateStart;
 
         return $this;
     }

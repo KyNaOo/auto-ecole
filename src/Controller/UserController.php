@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\EditUserType;
+use App\Repository\LeconRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,6 +66,28 @@ class UserController extends AbstractController
     {
         // controller can be blank: it will never be called!
         throw new \Exception('Don t forget to activate logout in security.yaml');
+    }
+
+    //Planning
+    #[Route('/user/planning', name: 'app_user_planning', methods: ['GET'])]
+    public function planningUser(UserRepository $userRepository, LeconRepository $leconRepository): Response
+    {
+        $event= $leconRepository->findAll();
+        $lecon = [];
+        foreach ($event as $event){
+            $lecon[]=[
+                'id'=>$event->getId(),
+                'start'=>$event->getDateStart()->format('Y-m-d H:i:s'),
+                'end'=>$event->getDateEnd()->format('Y-m-d H:i:s'),
+                'title'=>"COURS",
+                'backgroundColor'=>"rgb(0, 255, 0)",
+                'borderColor'=>"pink",
+                'textColor'=>"black"
+            ];
+        }
+        $data=json_encode($lecon);
+        return $this->render('user/planningEleve.html.twig',compact('data')
+        );
     }
 
 

@@ -11,18 +11,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Heure</th>
                 <th>Reglée</th>
+                <th>Debut</th>
+                <th>Fin</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for lecon in lecons %}
             <tr>
-                <td>{{ lecon.date ? lecon.date|date('Y-m-d') : '' }}</td>
-                <td>{{ lecon.heure }}</td>
                 <td>{{ lecon.reglee }}</td>
+                <td>{{ lecon.dateStart ? lecon.dateStart|date('Y-m-d H:i:s'):'' }}</td>
+                <td>{{ lecon.dateEnd ? lecon.dateEnd|date('Y-m-d H:i:s'):''}}</td>
                 <td>
                     <a href="{{ path('app_lecon_show', {'id': lecon.id}) }}">show</a>
                     <a href="{{ path('app_lecon_edit', {'id': lecon.id}) }}">edit</a>

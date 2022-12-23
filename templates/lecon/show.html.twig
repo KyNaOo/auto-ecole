@@ -15,12 +15,12 @@
                 <td>{{ lecon.id }}</td>
             </tr>
             <tr>
-                <th>Date</th>
-                <td>{{ lecon.date ? lecon.date|date('Y-m-d') : '' }}</td>
+                <th>Debut</th>
+                <td>{{ lecon.dateStart ? lecon.dateStart|date('Y-m-d H:i:s'):'' }}</td>
             </tr>
             <tr>
-                <th>Heure</th>
-                <td>{{ lecon.heure }}</td>
+                <th>Fin</th>
+                <td>{{ lecon.dateEnd ? lecon.dateEnd|date('Y-m-d H:i:s'):'' }}</td>
             </tr>
             <tr>
                 <th>Immatriculation</th>
