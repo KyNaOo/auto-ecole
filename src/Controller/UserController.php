@@ -100,10 +100,12 @@ class UserController extends AbstractController
     public function countUser(UserRepository $userRepository): Response
     {
         $result = $userRepository->blabla();
+        $result2 = $userRepository->blabla2();
 
         //dd($result);
         return $this->render('user/graph.html.twig', [
-            'result'=>$result
+            'result'=>$result,
+            'result2'=>$result2
         ]);
     }
 

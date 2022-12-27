@@ -61,6 +61,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     //graph
     public function blabla()
+        //nombre de lecon par categorie
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -79,13 +80,57 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $resultSet->fetchAllAssociative();
     }
-//SELECT categorie.libelle, COUNT(lecon.id)
-//FROM lecon
-//INNER JOIN vehicule ON vehicule.id =lecon.codevehicule_id
-//INNER JOIN categorie ON categorie.id = vehicule.codecategorie_id
-//INNER JOIN user ON user.id = lecon.id
-//WHERE user.id = 1
-//GROUP BY categorie.libelle
+
+    public function blabla2()
+    {
+        //nombre de lecon par moniteur
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT um.nom, COUNT(l.id)/2 as cbLecons
+                FROM lecon l
+                INNER JOIN lecon_user lu ON lu.lecon_id = l.id
+                INNER JOIN user um ON um.id=lu.user_id
+                INNER JOIN user ue ON ue.id = lu.user_id
+                WHERE ue.id = 1
+                GROUP BY um.nom";
+//        AND um.roles LIKE '%ROLE_ADMIN%'
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+    public function blabla3()
+    {
+        //nombre de lecon par moniteur
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT c.libelle, SUM(c.prix)
+                FROM lecon l
+                INNER JOIN vehicule v ON v.immatriculation=l.codevehicule_id
+                INNER JOIN categorie c ON c.id=v.codecategorie_id
+                INNER JOIN lecon_user lu ON lu.lecon_id = l.id
+                INNER JOIN user um ON um.id=lu.user_id
+                WHERE um.id=1
+                GROUP BY c.libelle";
+//        AND um.roles LIKE '%ROLE_ADMIN%'
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+//SELECT um.nom, COUNT(l.id)/2
+//FROM lecon l
+//INNER JOIN lecon_user lu ON lu.lecon_id = l.id
+//INNER JOIN user um ON um.id=lu.user_id
+//INNER JOIN user ue ON ue.id = lu.user_id
+//WHERE ue.id = 1
+//AND um.roles LIKE "[%ROLE_ADMIN%]"
+//GROUP BY um.nom
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
