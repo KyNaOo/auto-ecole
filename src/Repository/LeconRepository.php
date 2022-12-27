@@ -39,20 +39,34 @@ class LeconRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByUser(int $idUser){
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "select distinct lecon.id, lecon.codevehicule_id, lecon.reglee, lecon.date_end, lecon.date_start  from bddautoecoleweb.lecon, lecon_user, user
+where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Lecon[] Returns an array of Lecon objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('l.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByExampleField(int $value): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.id = :val')
+            ->setParameter('val', $value)
+            ->orderBy('l.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+       ;
+    }
 
 //    public function findOneBySomeField($value): ?Lecon
 //    {

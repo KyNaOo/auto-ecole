@@ -72,7 +72,8 @@ class UserController extends AbstractController
     #[Route('/user/planning', name: 'app_user_planning', methods: ['GET'])]
     public function planningUser(UserRepository $userRepository, LeconRepository $leconRepository): Response
     {
-        $event= $leconRepository->findAll();
+        $event = $leconRepository->findAll();
+        //$event= $leconRepository->findByExampleField($this->getUser()->getId());
         $lecon = [];
         foreach ($event as $event){
             $lecon[]=[
