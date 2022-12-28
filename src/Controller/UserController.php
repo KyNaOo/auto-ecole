@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\String\u;
 
 class UserController extends AbstractController
 {
@@ -109,7 +110,40 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/user/stats', name: 'app_user_count', methods: ['GET'])]
+    public function statsUser(UserRepository $userRepository): Response
+    {
+        $result = $userRepository->getMontantPermis();
+        $result2 = $userRepository->getMontantRestant();
+        $result3 = $userRepository->getNbLeconByEleve();
+        $result4 = $userRepository->getVehiculeUseByEleve();
+            $i=0;
+        $vehiculeMaxUse=[];
+//        dd(count($result4));
+            if (isset($result4 [1])) {
 
-
-    //conflit git
+                while ($i < count($result4)) {
+                    $vehiculeMaxUse[]=
+                        [$result4[$i]["Marque"], $result4[$i]["Modele"], $result4[$i]["nbLecon"]]
+                    ;
+                    $i++;
+                }
+            }
+            else{
+                $vehiculeMaxUse[] = $result4[0]['Marque'];
+                $vehiculeMaxUse[] = $result4[0]['Modele'];
+                $vehiculeMaxUse[] = $result4[0]['nbLecon'];
+            }
+//dd($vehiculeMaxUse);
+        $nbLecon = $result3[0]["nbLecon"];
+        $prixRestant = $result2[0]["prixRestant"];
+        $prixPermis = $result[0]["prix"];
+        //dd($prix);
+        return $this->render('user/stats.html.twig', [
+            'prix'=>$prixPermis,
+            'prixRestant'=>$prixRestant,
+            'nbLecon'=>$nbLecon,
+            'vehicules'=>$vehiculeMaxUse,
+        ]);
+    }
 }

@@ -1,0 +1,7 @@
+Montant total des lecons prises : {{ prix }}€ <br>
+Montant restant à payer : {{ prixRestant }}€ <br>
+Nombre de leçon total (passées et réservées) : {{ nbLecon }} <br>
+Le ou les véhicule(s) que vous avez le plus utilisé :
+{% for vehicule in vehicules %}
+    {{ vehicule[0] }} - {{ vehicule[1] }} - nombre de lecon : {{ vehicule[2] }}
+{% endfor %}

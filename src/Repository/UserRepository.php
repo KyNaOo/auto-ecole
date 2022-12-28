@@ -123,6 +123,85 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getMontantPermis()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT SUM(categorie.prix) as prix FROM `categorie` 
+                INNER JOIN vehicule ON vehicule.codecategorie_id = categorie.id
+                INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
+                INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
+                WHERE lecon_user.user_id=3 ";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getMontantRestant()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT SUM(categorie.prix) as prixRestant FROM `categorie` 
+                INNER JOIN vehicule ON vehicule.codecategorie_id = categorie.id
+                INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
+                INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
+                WHERE lecon_user.user_id=3
+                AND lecon.reglee = 0";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getNbLeconByEleve()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT COUNT(lecon.id) as nbLecon FROM lecon 
+                INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
+                WHERE lecon_user.user_id=3";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+
+    public function getVehiculeUseByEleve()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT vehicule.Marque, vehicule.Modele, COUNT(lecon.id)AS nbLecon
+                FROM vehicule
+                INNER JOIN lecon ON lecon.codevehicule_id=vehicule.id
+                INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
+                WHERE lecon_user.user_id=3
+                GROUP BY vehicule.Modele
+                HAVING COUNT(lecon.id)=(
+                SELECT MAX(nb)
+                    FROM (SELECT COUNT(lecon.id)AS nb
+                          FROM lecon
+                          GROUP by lecon.codevehicule_id)AS temp)";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 //SELECT um.nom, COUNT(l.id)/2
 //FROM lecon l
 //INNER JOIN lecon_user lu ON lu.lecon_id = l.id
