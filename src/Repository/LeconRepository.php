@@ -53,6 +53,12 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
         return $resultSet->fetchAllAssociative();
     }
 
+    public function userCalendar(int $idUser){
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery('SELECT l FROM App\Entity\Lecon l JOIN l.codeuser lc WHERE lc.id= ?1')->setParameter('1',$idUser);
+        return $query->getResult();
+    }
+//SELECT u FROM User u JOIN Banlist b WITH u.email = b.email
 //    /**
 //     * @return Lecon[] Returns an array of Lecon objects
 //     */
