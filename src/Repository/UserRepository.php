@@ -123,7 +123,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getMontantPermis()
+    public function getMontantPermis(int $userId)
     {
 
         $conn = $this->getEntityManager()->getConnection();
@@ -132,16 +132,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN vehicule ON vehicule.codecategorie_id = categorie.id
                 INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
                 INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
-                WHERE lecon_user.user_id=3 ";
+                WHERE lecon_user.user_id=:userId ";
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getMontantRestant()
+    public function getMontantRestant(int $userId)
     {
 
         $conn = $this->getEntityManager()->getConnection();
@@ -150,34 +150,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN vehicule ON vehicule.codecategorie_id = categorie.id
                 INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
                 INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
-                WHERE lecon_user.user_id=3
+                WHERE lecon_user.user_id=:userId
                 AND lecon.reglee = 0";
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getNbLeconByEleve()
+    public function getNbLeconByEleve(int $userId)
     {
 
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = "SELECT COUNT(lecon.id) as nbLecon FROM lecon 
                 INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
-                WHERE lecon_user.user_id=3";
+                WHERE lecon_user.user_id=:userId";
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
 
 
-    public function getVehiculeUseByEleve()
+    public function getVehiculeUseByEleve(int $userId)
     {
 
         $conn = $this->getEntityManager()->getConnection();
@@ -186,7 +186,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 FROM vehicule
                 INNER JOIN lecon ON lecon.codevehicule_id=vehicule.id
                 INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
-                WHERE lecon_user.user_id=3
+                WHERE lecon_user.user_id=:userId
                 GROUP BY vehicule.Modele
                 HAVING COUNT(lecon.id)=(
                 SELECT MAX(nb)
@@ -196,7 +196,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }

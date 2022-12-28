@@ -113,37 +113,20 @@ class UserController extends AbstractController
     #[Route('/user/stats', name: 'app_user_count', methods: ['GET'])]
     public function statsUser(UserRepository $userRepository): Response
     {
-        $result = $userRepository->getMontantPermis();
-        $result2 = $userRepository->getMontantRestant();
-        $result3 = $userRepository->getNbLeconByEleve();
-        $result4 = $userRepository->getVehiculeUseByEleve();
-            $i=0;
-        $vehiculeMaxUse=[];
-//        dd(count($result4));
-            if (isset($result4 [1])) {
 
-                while ($i < count($result4)) {
-                    $vehiculeMaxUse[]=
-                        [$result4[$i]["Marque"], $result4[$i]["Modele"], $result4[$i]["nbLecon"]]
-                    ;
-                    $i++;
-                }
-            }
-            else{
-                $vehiculeMaxUse[] = $result4[0]['Marque'];
-                $vehiculeMaxUse[] = $result4[0]['Modele'];
-                $vehiculeMaxUse[] = $result4[0]['nbLecon'];
-            }
-//dd($vehiculeMaxUse);
+        $result1 = $userRepository->getMontantPermis($this->getUser()->getId());
+        $result2 = $userRepository->getMontantRestant($this->getUser()->getId());
+        $result3 = $userRepository->getNbLeconByEleve($this->getUser()->getId());
+        $result4 = $userRepository->getVehiculeUseByEleve($this->getUser()->getId());
+
         $nbLecon = $result3[0]["nbLecon"];
         $prixRestant = $result2[0]["prixRestant"];
-        $prixPermis = $result[0]["prix"];
-        //dd($prix);
+        $prixPermis = $result1[0]["prix"];
         return $this->render('user/stats.html.twig', [
             'prix'=>$prixPermis,
             'prixRestant'=>$prixRestant,
             'nbLecon'=>$nbLecon,
-            'vehicules'=>$vehiculeMaxUse,
+            'vehicules'=>$result4,
         ]);
     }
 }
