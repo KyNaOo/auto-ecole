@@ -1,0 +1,8 @@
+Moniteur(s) le(s) plus solicité(s) :
+{% for moniteur in moniteurs %}
+    {{ moniteur['nom'] }} : {{ moniteur['nbLecon'] }} fois
+{% endfor %}<br>
+Véhicule(s) le(s) plus utilisé(s) :
+{% for vehicule in vehicules %}
+    {{ vehicule['marque'] }} - {{ vehicule['modele'] }} : {{ vehicule['nbLecon'] }} fois
+{% endfor %}

@@ -1,0 +1,6 @@
+Nombre de lecons données : {{ nbLecon }} <br>
+Chiffre d'affaire total : {{ CATot }}€ <br>
+Nombre de leçon par catégorie :
+{% for categorie in categories %}
+    {{ categorie['libelle'] }} : {{ categorie['nbLecon'] }}
+{% endfor %}

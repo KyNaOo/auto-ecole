@@ -83,4 +83,20 @@ class MoniteurController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('/moniteur/stats', name: 'app_moniteur_stats', methods: ['GET'])]
+    public function statsMoniteur(UserRepository $userRepository): Response
+    {
+        $result1 = $userRepository->getNbLeconByMoniteur($this->getUser()->getId());
+        $result2 = $userRepository->getCATotByMoniteur($this->getUser()->getId());
+        $result3 = $userRepository->getNbLeconByMoniByCateg($this->getUser()->getId());
+        $nbLecon = $result1[0]["nbLecon"];
+        $CATot = $result2[0]["CATot"];
+        return $this->render('user/statsMoniteur.html.twig', [
+            'nbLecon'=>$nbLecon,
+            'CATot'=>$CATot,
+            'categories'=>$result3,
+        ]);
+    }
+
 }

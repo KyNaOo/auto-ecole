@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\EditUserType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,18 @@ class AdminController extends AbstractController
         return $this->render('admin/editAdmin.html.twig', [
             'controller_name' => 'UserController',
             'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/admin/stats', name: 'app_admin_edit', methods: ['GET'])]
+    public function statAdmin(UserRepository $userRepository): Response
+    {
+        $result1 = $userRepository->getMoniteurMaxUse();
+        $result2 = $userRepository->getVehiculeMaxUse();
+
+        return $this->render('admin/statsAdmin.html.twig', [
+            'moniteurs'=>$result1,
+            'vehicules'=>$result2,
         ]);
     }
 

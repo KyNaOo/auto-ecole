@@ -56,9 +56,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
-
-
-
     //graph
     public function blabla()
         //nombre de lecon par categorie
@@ -101,6 +98,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $resultSet->fetchAllAssociative();
     }
+
     public function blabla3()
     {
         //nombre de lecon par moniteur
@@ -176,7 +174,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $resultSet->fetchAllAssociative();
     }
 
-
     public function getVehiculeUseByEleve(int $userId)
     {
 
@@ -197,6 +194,104 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $stmt = $conn->prepare($sql);
 
         $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getNbLeconByMoniteur(int $userId)
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT COUNT(lecon_user.user_id) as nbLecon FROM lecon_user WHERE lecon_user.user_id=:userId";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getCATotByMoniteur(int $userId)
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT SUM(categorie.prix) as CATot FROM categorie
+                INNER JOIN vehicule ON vehicule.codecategorie_id = categorie.id
+                INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
+                INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
+                WHERE lecon_user.user_id=:userId";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getNbLeconByMoniByCateg(int $userId)
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT categorie.libelle, COUNT(lecon_user.user_id) as nbLecon FROM lecon_user 
+                INNER JOIN lecon ON lecon.id = lecon_user.lecon_id
+                INNER JOIN vehicule ON vehicule.id = lecon.codevehicule_id
+                INNER JOIN categorie ON categorie.id = vehicule.codecategorie_id
+                WHERE lecon_user.user_id=:userId
+                GROUP BY categorie.libelle";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getMoniteurMaxUse()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT user.nom, COUNT(lecon_user.user_id)AS nbLecon
+                FROM user
+                INNER JOIN lecon_user ON lecon_user.user_id = user.id
+                WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')
+                GROUP BY user.id
+                HAVING COUNT(lecon_user.user_id)=(
+                SELECT MAX(nb) 
+                    FROM (SELECT COUNT(lecon_user.user_id)AS nb 
+                          FROM lecon_user
+                          INNER JOIN user ON user.id = lecon_user.user_id
+                          WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')
+                          GROUP BY user.id)AS temp)";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getVehiculeMaxUse()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT vehicule.marque, vehicule.modele, COUNT(lecon.id)AS nbLecon
+                FROM vehicule
+                INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
+                GROUP BY lecon.codevehicule_id
+                HAVING COUNT(lecon.id)=(
+                SELECT MAX(nb) 
+                    FROM (SELECT COUNT(lecon.id)AS nb 
+                          FROM lecon
+                          GROUP BY lecon.codevehicule_id)AS temp)";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
 
         return $resultSet->fetchAllAssociative();
     }

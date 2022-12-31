@@ -110,7 +110,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/stats', name: 'app_user_count', methods: ['GET'])]
+    #[Route('/user/stats', name: 'app_user_stats', methods: ['GET'])]
     public function statsUser(UserRepository $userRepository): Response
     {
 
