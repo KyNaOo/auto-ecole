@@ -60,28 +60,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
 
     //graph
-    public function blabla()
+    public function nbCategorie(int $userId)
         //nombre de lecon par categorie
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT c.libelle, COUNT(l.id) as nbLecons
+        $sql = "SELECT c.libelle as libelle, COUNT(l.id) as nbLecons
                 FROM lecon l
                 INNER JOIN lecon_user lu on l.id = lu.lecon_id
                 INNER JOIN user u on lu.user_id = u.id
                 INNER JOIN vehicule v on l.codevehicule_id = v.id
                 INNER JOIN categorie c on v.codecategorie_id = c.id
-                WHERE u.id = 1
+                WHERE u.id = :userId
                 GROUP BY c.libelle";
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
 
         return $resultSet->fetchAllAssociative();
     }
 
-    public function blabla2()
+    public function nbLeconMoniteur(int $userId)
     {
         //nombre de lecon par moniteur
         $conn = $this->getEntityManager()->getConnection();
@@ -91,34 +92,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN lecon_user lu ON lu.lecon_id = l.id
                 INNER JOIN user um ON um.id=lu.user_id
                 INNER JOIN user ue ON ue.id = lu.user_id
-                WHERE ue.id = 1
+                WHERE ue.id = :userId
                 GROUP BY um.nom";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
-    public function blabla3()
+    public function prixCateg(int $userId)
     {
-        //nombre de lecon par moniteur
+        //prix par categorie
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT c.libelle, SUM(c.prix)
+        $sql = "SELECT c.libelle as libelle, SUM(c.prix) as somme
                 FROM lecon l
-                INNER JOIN vehicule v ON v.immatriculation=l.codevehicule_id
+                INNER JOIN vehicule v ON v.id=l.codevehicule_id
                 INNER JOIN categorie c ON c.id=v.codecategorie_id
                 INNER JOIN lecon_user lu ON lu.lecon_id = l.id
                 INNER JOIN user um ON um.id=lu.user_id
-                WHERE um.id=1
+                WHERE um.id=:userId
                 GROUP BY c.libelle";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }

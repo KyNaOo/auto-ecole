@@ -10,43 +10,42 @@
 
 
     <canvas id="monGraph" width="400" height="100"></canvas>
+    <canvas id="monGraph2" width="400" height="100"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        let test = [];
+        let nb = [];
+        let nomCateg = [];
         {% for i in result %}
-            test.push({{ i.nbLecons }});
+            nb.push({{ i.nbLecons }});
+            nomCateg.push("{{ i.libelle }}");
         {% endfor %}
 
-        let test2 = [];
+        let nbLecon = [];
+        let nom = [];
         {% for i in result2 %}
-            test2.push({{ i.cbLecons }});
+            nbLecon.push({{ i.cbLecons }});
+            nom.push("{{ i.nom }}")
         {% endfor %}
 
         let ctx=document.querySelector("#monGraph")
+        let ctx2=document.querySelector("#monGraph2")
 
 
         let graph = new Chart
         (ctx,
             {
-                type:"bar",
+                type:"pie",
                 data:
                     {
-                        labels:['Rouge','Bleu'],
+                        labels:nomCateg,
                         datasets:
                             [
                                 {
-                                    label:'nombre de votes',
-                                    data: [test],
-                                    //data: [1,2],
-                                    borderColor:'red',
-                                    //les points
-                                    backgroundColor:['red','blue']
+                                    label:'nombre de lecon par categorie',
+                                    data: nb,
+                                    backgroundColor:['red','blue','green','purple'],
+
                                 }
-                                // ,
-                                // {
-                                //     label:'nombre de voiture',
-                                //     data: [14,2,5,8,7,22]
-                                // }
                             ]
                     },
                 options:
@@ -59,34 +58,30 @@
                         legend:
                             {
                                 position:'bottom'
-                            }
+                            },
+
 
                     }
             }
         )
 
         let graph2 = new Chart
-        (ctx,
+        (ctx2,
             {
                 type:"pie",
                 data:
                     {
-                        labels:['Rouge','Bleu'],
+                        labels:nom,
                         datasets:
                             [
                                 {
                                     label:'nombre de votes',
-                                    data: [test2],
+                                    data: [nbLecon],
                                     //data: [1,2],
                                     borderColor:'red',
                                     //les points
                                     backgroundColor:['red','blue']
                                 }
-                                // ,
-                                // {
-                                //     label:'nombre de voiture',
-                                //     data: [14,2,5,8,7,22]
-                                // }
                             ]
                     },
                 options:

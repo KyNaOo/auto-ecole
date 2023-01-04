@@ -94,14 +94,12 @@ class UserController extends AbstractController
 
 
 
-
-
     //graph
-    #[Route('/user/graph', name: 'app_user_count', methods: ['GET'])]
+    #[Route('/user/graph', name: 'app_user_graph', methods: ['GET'])]
     public function countUser(UserRepository $userRepository): Response
     {
-        $result = $userRepository->blabla();
-        $result2 = $userRepository->blabla2();
+        $result = $userRepository->nbCategorie($this->getUser()->getId());
+        $result2 = $userRepository->nbLeconMoniteur($this->getUser()->getId());
 
         //dd($result);
         return $this->render('user/graph.html.twig', [

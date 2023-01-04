@@ -1,0 +1,106 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Vehicule{% endblock %}
+
+{% block body %}
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
+
+
+
+    <canvas id="monGraph" width="400" height="100"></canvas>
+    <canvas id="monGraph2" width="400" height="100"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let somme = [];
+        let labelle=[];
+        {% for i in result %}
+            somme.push({{ i.somme }});
+            labelle.push("{{ i.libelle }}");
+        {% endfor %}
+
+{#        let test2 = [];#}
+{#        {% for i in result2 %}#}
+{#        test2.push({{ i.cbLecons }});#}
+{#        {% endfor %}#}
+
+        let ctx=document.querySelector("#monGraph")
+        let ctx2=document.querySelector("#monGraph2")
+
+
+        let graph = new Chart
+        (ctx,
+            {
+                type:"bar",
+                data:
+                    {
+                        labels:labelle,
+                        datasets:
+                            [
+                                {
+                                    label:'nombre de votes',
+                                    data: somme,
+                                    backgroundColor:['red','blue','purple']
+                                }
+                            ]
+                    },
+                options:
+                    {
+                        title:
+                            {
+                                display:true,
+                                text:'mon joli graph'
+                            },
+                        legend:
+                            {
+                                position:'bottom'
+                            }
+
+                    }
+            }
+        )
+
+        // let graph2 = new Chart
+        // (ctx2,
+        //     {
+        //         type:"pie",
+        //         data:
+        //             {
+        //                 labels:['Rouge','Bleu'],
+        //                 datasets:
+        //                     [
+        //                         {
+        //                             label:'nombre de votes',
+        //                             data: [test2],
+        //                             //data: [1,2],
+        //                             borderColor:'red',
+        //                             //les points
+        //                             backgroundColor:['red','blue']
+        //                         }
+        //                         // ,
+        //                         // {
+        //                         //     label:'nombre de voiture',
+        //                         //     data: [14,2,5,8,7,22]
+        //                         // }
+        //                     ]
+        //             },
+        //         options:
+        //             {
+        //                 title:
+        //                     {
+        //                         display:true,
+        //                         text:'mon joli graph'
+        //                     },
+        //                 legend:
+        //                     {
+        //                         position:'bottom'
+        //                     }
+        //
+        //             }
+        //     }
+        // )
+    </script>
+
+
+{% endblock %}
