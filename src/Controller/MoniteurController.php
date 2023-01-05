@@ -87,10 +87,14 @@ class MoniteurController extends AbstractController
     public function graphMoni(UserRepository $userRepository): Response
     {
         $result = $userRepository->prixCateg($this->getUser()->getId());
+        $result2 = $userRepository->nbLeconCateg($this->getUser()->getId());
+
 
         //dd($result);
         return $this->render('moniteur/graph.html.twig', [
-            'result'=>$result
+            'result'=>$result,
+            'result2'=>$result2
+
         ]);
     }
 }

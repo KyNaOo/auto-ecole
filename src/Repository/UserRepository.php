@@ -62,6 +62,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //graph
     public function nbCategorie(int $userId)
         //nombre de lecon par categorie
+        //pour eleve
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -84,10 +85,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function nbLeconMoniteur(int $userId)
     {
+        //pour eleve
         //nombre de lecon par moniteur
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT um.nom, COUNT(l.id)/2 as cbLecons
+        $sql = "SELECT um.nom, COUNT(l.id) as cbLecons
                 FROM lecon l
                 INNER JOIN lecon_user lu ON lu.lecon_id = l.id
                 INNER JOIN user um ON um.id=lu.user_id
@@ -105,6 +107,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function prixCateg(int $userId)
     {
         //prix par categorie
+        //pour moni
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = "SELECT c.libelle as libelle, SUM(c.prix) as somme
@@ -123,6 +126,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $resultSet->fetchAllAssociative();
     }
+    public function nbLeconCateg(int $userId)
+    {
+        //nombre de lecon par categ
+        //pour moni
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT c.libelle as libelle2, COUNT(c.id) as nb
+                FROM categorie c
+                INNER JOIN vehicule v ON v.id=l.codevehicule_id
+                INNER JOIN lecon l ON l.codevehicule_id = v.id
+                INNER JOIN lecon_user lu ON lu.lecon_id = l.id
+                INNER JOIN user um ON um.id=lu.user_id
+                WHERE um.id=:userId
+                AND JSON_CONTAINS(roles,'ROLE_MONITEUR')
+                GROUP BY c.libelle";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+//SELECT categorie.Libelle, COUNT(categorie.CodeCategorie) AS nb
+// FROM `categorie`\n" +
+//                "INNER JOIN vehicule ON vehicule.CodeCategorie = categorie.CodeCategorie\n" +
+//                "INNER JOIN lecon ON lecon.immatriculation = vehicule.Immatriculation\n" +
+//                "INNER JOIN moniteur ON moniteur.CodeMoniteur = lecon.codeMoniteur\n" +
+//                "WHERE moniteur.CodeMoniteur = ?\n" +
+//                "GROUP BY categorie.Libelle
 
     public function getMontantPermis(int $userId)
     {

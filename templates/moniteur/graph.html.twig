@@ -20,10 +20,12 @@
             labelle.push("{{ i.libelle }}");
         {% endfor %}
 
-{#        let test2 = [];#}
-{#        {% for i in result2 %}#}
-{#        test2.push({{ i.cbLecons }});#}
-{#        {% endfor %}#}
+        let nb = [];
+        let labelle2=[];
+        {% for i in result2 %}
+            nb.push({{ i.nb }});
+            labelle2.push("{{ i.libelle2 }}");
+        {% endfor %}
 
         let ctx=document.querySelector("#monGraph")
         let ctx2=document.querySelector("#monGraph2")
@@ -61,45 +63,40 @@
             }
         )
 
-        // let graph2 = new Chart
-        // (ctx2,
-        //     {
-        //         type:"pie",
-        //         data:
-        //             {
-        //                 labels:['Rouge','Bleu'],
-        //                 datasets:
-        //                     [
-        //                         {
-        //                             label:'nombre de votes',
-        //                             data: [test2],
-        //                             //data: [1,2],
-        //                             borderColor:'red',
-        //                             //les points
-        //                             backgroundColor:['red','blue']
-        //                         }
-        //                         // ,
-        //                         // {
-        //                         //     label:'nombre de voiture',
-        //                         //     data: [14,2,5,8,7,22]
-        //                         // }
-        //                     ]
-        //             },
-        //         options:
-        //             {
-        //                 title:
-        //                     {
-        //                         display:true,
-        //                         text:'mon joli graph'
-        //                     },
-        //                 legend:
-        //                     {
-        //                         position:'bottom'
-        //                     }
-        //
-        //             }
-        //     }
-        // )
+        let graph2 = new Chart
+        (ctx2,
+            {
+                type:"pie",
+                data:
+                    {
+                        labels:labelle2,
+                        datasets:
+                            [
+                                {
+                                    label:'nombre de votes',
+                                    data: [nb],
+                                    //data: [1,2],
+                                    borderColor:'red',
+                                    //les points
+                                    backgroundColor:['red','blue']
+                                }
+                            ]
+                    },
+                options:
+                    {
+                        title:
+                            {
+                                display:true,
+                                text:'mon joli graph'
+                            },
+                        legend:
+                            {
+                                position:'bottom'
+                            }
+
+                    }
+            }
+        )
     </script>
 
 
