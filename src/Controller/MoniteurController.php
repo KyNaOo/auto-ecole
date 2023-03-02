@@ -99,4 +99,17 @@ class MoniteurController extends AbstractController
         ]);
     }
 
+    #[Route('/moniteur/graph', name: 'app_moniteur_graph', methods: ['GET'])]
+    public function graphMoni(UserRepository $userRepository): Response
+    {
+        $result = $userRepository->prixCateg($this->getUser()->getId());
+        $result2 = $userRepository->nbLeconCateg($this->getUser()->getId());
+        //dd($result);
+        return $this->render('moniteur/graph.html.twig', [
+            'result'=>$result,
+            'result2'=>$result2
+
+        ]);
+    }
 }
+//correction conflit

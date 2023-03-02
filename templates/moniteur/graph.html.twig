@@ -13,18 +13,18 @@
     <canvas id="monGraph2" width="400" height="100"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        let nb = [];
-        let nomCateg = [];
+        let somme = [];
+        let labelle=[];
         {% for i in result %}
-            nb.push({{ i.nbLecons }});
-            nomCateg.push("{{ i.libelle }}");
+            somme.push({{ i.somme }});
+            labelle.push("{{ i.libelle }}");
         {% endfor %}
 
-        let nbLecon = [];
-        let nom = [];
+        let nb = [];
+        let labelle2=[];
         {% for i in result2 %}
-            nbLecon.push({{ i.cbLecons }});
-            nom.push("{{ i.nom }}")
+            nb.push({{ i.nb }});
+            labelle2.push("{{ i.libelle2 }}");
         {% endfor %}
 
         let ctx=document.querySelector("#monGraph")
@@ -34,17 +34,16 @@
         let graph = new Chart
         (ctx,
             {
-                type:"pie",
+                type:"bar",
                 data:
                     {
-                        labels:nomCateg,
+                        labels:labelle,
                         datasets:
                             [
                                 {
-                                    label:'nombre de lecon par categorie',
-                                    data: nb,
-                                    backgroundColor:['red','blue','green','purple'],
-
+                                    label:'nombre de votes',
+                                    data: somme,
+                                    backgroundColor:['red','blue','purple']
                                 }
                             ]
                     },
@@ -58,8 +57,7 @@
                         legend:
                             {
                                 position:'bottom'
-                            },
-
+                            }
 
                     }
             }
@@ -71,12 +69,12 @@
                 type:"pie",
                 data:
                     {
-                        labels:nom,
+                        labels:labelle2,
                         datasets:
                             [
                                 {
                                     label:'nombre de votes',
-                                    data: [nbLecon],
+                                    data: [nb],
                                     //data: [1,2],
                                     borderColor:'red',
                                     //les points
