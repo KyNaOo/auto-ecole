@@ -148,13 +148,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $resultSet->fetchAllAssociative();
     }
-//SELECT categorie.Libelle, COUNT(categorie.CodeCategorie) AS nb
-// FROM `categorie`\n" +
-//                "INNER JOIN vehicule ON vehicule.CodeCategorie = categorie.CodeCategorie\n" +
-//                "INNER JOIN lecon ON lecon.immatriculation = vehicule.Immatriculation\n" +
-//                "INNER JOIN moniteur ON moniteur.CodeMoniteur = lecon.codeMoniteur\n" +
-//                "WHERE moniteur.CodeMoniteur = ?\n" +
-//                "GROUP BY categorie.Libelle
 
     public function getMontantPermis(int $userId)
     {

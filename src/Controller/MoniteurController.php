@@ -88,8 +88,6 @@ class MoniteurController extends AbstractController
     {
         $result = $userRepository->prixCateg($this->getUser()->getId());
         $result2 = $userRepository->nbLeconCateg($this->getUser()->getId());
-
-
         //dd($result);
         return $this->render('moniteur/graph.html.twig', [
             'result'=>$result,
