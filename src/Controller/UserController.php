@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\String\u;
 
 class UserController extends AbstractController
 {
@@ -132,7 +133,23 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/user/stats', name: 'app_user_count', methods: ['GET'])]
+    public function statsUser(UserRepository $userRepository): Response
+    {
 
+        $result1 = $userRepository->getMontantPermis($this->getUser()->getId());
+        $result2 = $userRepository->getMontantRestant($this->getUser()->getId());
+        $result3 = $userRepository->getNbLeconByEleve($this->getUser()->getId());
+        $result4 = $userRepository->getVehiculeUseByEleve($this->getUser()->getId());
 
-    //conflit git
+        $nbLecon = $result3[0]["nbLecon"];
+        $prixRestant = $result2[0]["prixRestant"];
+        $prixPermis = $result1[0]["prix"];
+        return $this->render('user/stats.html.twig', [
+            'prix'=>$prixPermis,
+            'prixRestant'=>$prixRestant,
+            'nbLecon'=>$nbLecon,
+            'vehicules'=>$result4,
+        ]);
+    }
 }
