@@ -1,31 +1,106 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
-<script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
-<nav class="navbar shadow-1 grey dark-4">
-    <a class="navbar-brand">Moniteur</a>
-    <!-- Dark menu background hover variant -->
-    <div class="navbar-menu ml-auto hover-bg-dark">
-        <a class="navbar-link active" href="#">Planning</a>
-        <a class="navbar-link" href="#">Profil</a>
-        <a class="navbar-link" href="#">Stats</a>
-        <a class="navbar-link" href="{{ path('app_addLicence') }}">Licence</a>
-    </div>
-</nav>
+{% extends 'user/index.html.twig' %}
 {% block body %}
-    <h1>BIENVENUE !</h1>
-    {% for message in app.flashes('message') %}
-        <div class="col-xs4">
-            <div class="p-3 my-2 rounded-1 green light-4 text-green text-dark-4">{{ message }}</div>
-        </div>
-    {% endfor %}
-    <div class="grix xs2">
-        <div>Email</div>
-        <div>{{ app.user.email }}</div>
-        <div>Nom</div>
-        <div>{{ app.user.nom }}</div>
-        <div>Prénom</div>
-        <div>{{ app.user.prenom }}</div>
-        <a href="{{ path('app_logout') }}" class="btn shadow-1 rounded-1 blue">Déconnexion</a>
-        <a href="{{ path('app_moniteur_edit') }}" class="btn shadow-1 rounded-1 blue">Modifier le profil</a>
-        <a href="{{ path('app_moniteur_editPass') }}" class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</a>
+{% block CSS %}
+    {{ parent(CSS) }}
+{% endblock %}
+{% for message in app.flashes('message') %}
+    <div class="col-xs4">
+        <div class="p-3 my-2 rounded-1 green light-4 text-green text-dark-4">{{ message }}</div>
     </div>
+{% endfor %}
+<div class="wrapper">
+    <nav class="right" id="sidebar">
+        <div class="top">
+            <div class="card">
+                <div class="image">
+                    <img src="https://drive.google.com/uc?export=view&id=1Wegu0NMTd3_KkxZlubIntbL7MolKJqgj">
+                </div>
+
+                <div class="text">
+                    <span class="name">{{ app.user.prenom }}</span>
+                    <span class="job">Moniteur</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-menu">
+            <ul class="menu">
+                <li>
+                    <a href="#" class="nav-link" data-toggle="dropdown" data-menu="dashboard"><i class="bi bi-grid-1x2"></i>Licence</a>
+                    <div id="dashboard" class="dropdown-content">
+                        <a href="#">Ajouter une licence</a>
+                        <a href="#">Licence</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="{{ path('app_user_editPass') }}" class="nav-link"><i class="bi bi-collection"></i>Modifier le mot de passe</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_logout') }}" class="nav-link"><i class="bi bi-collection"></i>Deconnexion</a>
+                </li>
+                <li><a href="{{ path('app_user_edit') }}"><i class="bi bi-layers"></i>Modifier son profil</a></li>
+                <li><a href="{{ path('app_user_edit') }}"><i class="bi bi-layers"></i>Planning</a></li>
+                <li><a href="#"><i class="bi bi-layout-text-sidebar-reverse"></i>Stats</a></li>
+            </ul>
+        </div>
+
+        <div class="bottom">
+            <span>Dashboard</span>
+        </div>
+    </nav>
+
+    <div id="content">
+        <nav class="top" id="content-nav">
+            <div>
+                <a href="#" class="btn primary" id="btn-sidebar"></a>
+            </div>
+        </nav>
+    </div>
+    <script>
+        let ele =  document.querySelectorAll("[data-toggle='dropdown']");
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        let sidebar = document.querySelector('#btn-sidebar');
+
+        Array.from(ele).forEach(function(elem) {
+            elem.addEventListener('click', function() {
+                let attribute = this.getAttribute("data-menu");
+
+                hide_dropdown(attribute);
+
+                document.getElementById(attribute).classList.toggle("show");
+            });
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.nav-link')) {
+
+                Array.from(dropdowns).forEach(function(elem) {
+                    if (elem.classList.contains('show')) {
+                        elem.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        function hide_dropdown(attribute) {
+            Array.from(dropdowns).forEach(function(elem) {
+                let id = elem.getAttribute("id");
+
+                if (id !== attribute) {
+                    if (elem.classList.contains('show')) {
+                        elem.classList.remove('show');
+                    }
+                }
+            });
+        }
+
+        /*Btn sidebar*/
+        sidebar.addEventListener('click', function() {
+            document.querySelector('#sidebar').classList.toggle("active");
+            document.querySelector('#content').classList.toggle("active");
+            this.classList.toggle("active");
+        });
+    </script>
+</div>
 {% endblock %}
