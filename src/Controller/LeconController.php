@@ -78,24 +78,4 @@ class LeconController extends AbstractController
         return $this->redirectToRoute('app_lecon_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/newLecon', name: 'app_lecon_new_eleve', methods: ['GET', 'POST'])]
-    public function newLecon(Request $request, User $user, LeconRepository $leconRepository): Response
-    {
-        $user= $this->getUser();
-        $lecon = new Lecon();
-        $form = $this->createForm(LeconType::class, $lecon);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $lecon->addCodeuser($user);
-            $leconRepository->save($lecon, true);
-            return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('lecon/newLecon.html.twig', [
-            'lecon' => $lecon,
-            'form' => $form,
-            'user'=>$user
-        ]);
-    }
 }

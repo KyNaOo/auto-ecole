@@ -1,6 +1,5 @@
 {% block body %}
-    {% block navbar %}
-    {% endblock %}
+    {% block CSS %}
     <style>
         :root {
             --w-sidebar: 260px;
@@ -246,6 +245,7 @@
             color: white;
         }
     </style>
+    {% endblock %}
     <h1>BIENVENUE !</h1>
     {% for message in app.flashes('message') %}
         <div class="col-xs4">

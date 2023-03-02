@@ -38,6 +38,11 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_USER }
         - { path: ^/moniteur, roles: ROLE_MONITEUR }
+        - { path: ^/categorie, roles: ROLE_ADMIN }
+        - { path: ^/registerMoniteur, roles: ROLE_ADMIN }
+        - { path: ^/lecon, roles: ROLE_ADMIN }
+        - { path: ^/vehicule, roles: ROLE_ADMIN }
+        - { path: ^/licence, roles: ROLE_ADMIN }
 
 when@test:
     security:
