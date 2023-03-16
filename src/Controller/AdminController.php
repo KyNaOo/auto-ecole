@@ -42,6 +42,7 @@ class AdminController extends AbstractController
     {
         $result1 = $userRepository->getMoniteurMaxUse();
         $result2 = $userRepository->getVehiculeMaxUse();
+        //dd($userRepository->findUsersByRole("ROLE_MONITEUR"));
 
         return $this->render('admin/statsAdmin.html.twig', [
             'moniteurs'=>$result1,

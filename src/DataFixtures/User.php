@@ -32,7 +32,7 @@ class User extends Fixture
             $faker = Factory::create();
 
             for($i = 1; $i <= $nbEntite; $i++){
-                $user=new \App\Entity\User();
+                $user=new User();
                 $user->setEmail($faker->email());
                 $user->setNom($faker->lastName());
                 $user->setPrenom($faker->firstName());

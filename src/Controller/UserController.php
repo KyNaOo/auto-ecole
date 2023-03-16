@@ -72,15 +72,16 @@ class UserController extends AbstractController
         throw new \Exception('Don t forget to activate logout in security.yaml');
     }
     #[Route('/{id}/newLecon', name: 'app_lecon_new_eleve', methods: ['GET', 'POST'])]
-    public function newLecon(Request $request, User $user, LeconRepository $leconRepository): Response
+    public function newLecon(Request $request, User $user, LeconRepository $leconRepository,UserRepository $userRepository): Response
     {
         $user= $this->getUser();
         $lecon = new Lecon();
         $form = $this->createForm(LeconType::class, $lecon);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $moniteur=$userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]);
             $lecon->addCodeuser($user);
+            $lecon->addCodeuser($moniteur);
             $leconRepository->save($lecon, true);
             return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
         }
