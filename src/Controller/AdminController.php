@@ -37,16 +37,32 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/stats', name: 'app_admin_edit', methods: ['GET'])]
+    #[Route('/admin/stats', name: 'app_admin_stats', methods: ['GET'])]
     public function statAdmin(UserRepository $userRepository): Response
     {
+        $boolMono = false;
+        $boolVeh = false;
         $result1 = $userRepository->getMoniteurMaxUse();
         $result2 = $userRepository->getVehiculeMaxUse();
         //dd($userRepository->findUsersByRole("ROLE_MONITEUR"));
+//        dd($result2);
+        //conflit
+        if (count($result1)>1){
+            $boolMono = true;
+        }
+        if (count($result2)>1){
+            $boolVeh = true;
+        }
+        $nbUseMono = $result1[0]['nbLecon'];
+        $nbUseVeh = $result2[0]['nbLecon'];
 
         return $this->render('admin/statsAdmin.html.twig', [
             'moniteurs'=>$result1,
             'vehicules'=>$result2,
+            'verifCountMono'=>$boolMono,
+            'nbUseMono'=>$nbUseMono,
+            'nbUseVeh'=>$nbUseVeh,
+            'verifCountVeh'=>$boolVeh,
         ]);
     }
 
