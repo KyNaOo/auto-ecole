@@ -4,6 +4,10 @@ namespace App\Form;
 
 use App\Core\SexeChoice;
 use App\Entity\Lecon;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -34,7 +38,22 @@ class LeconType extends AbstractType
                     'placeholder' => '1 pour regler 0 pour non regler'
                 ]
             ])
-        ;
+            ->add('codeuser', EntityType::class, array(
+                'class'=>User::class,
+                'query_builder'=>function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->select('u')
+                        ->where('u.roles LIKE :roles')
+                        ->setParameter('roles', '%ROLE_MONITEUR%');
+                },
+                'mapped'=> false,
+                'choice_label' => function(User $user){
+                    return $user->getPrenom().' '.$user->getNom() ;
+                    }
+            ));
+
+        //$stmt = $conn->prepare($sql);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

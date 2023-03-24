@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Licence;
 use App\Entity\User;
 use App\Form\LicenceType;
+use App\Repository\LeconRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -110,6 +111,28 @@ class MoniteurController extends AbstractController
             'result2'=>$result2
 
         ]);
+    }
+    //Planning
+    #[Route('/user/planning', name: 'app_user_planningMoniteur', methods: ['GET'])]
+    public function planningUser(UserRepository $userRepository, LeconRepository $leconRepository): Response
+    {
+        $event = $leconRepository->userCalendar($this->getUser()->getId());
+        //$event= $leconRepository->findByExampleField($this->getUser()->getId());
+        $lecon = [];
+        foreach ($event as $event){
+            $lecon[]=[
+                'id'=>$event->getId(),
+                'start'=>$event->getDateStart()->format('Y-m-d H:i:s'),
+                'end'=>$event->getDateEnd()->format('Y-m-d H:i:s'),
+                'title'=>"COURS",
+                'backgroundColor'=>"rgb(0, 255, 0)",
+                'borderColor'=>"pink",
+                'textColor'=>"black"
+            ];
+        }
+        $data=json_encode($lecon);
+        return $this->render('user/planningEleve.html.twig',compact('data')
+        );
     }
 }
 //correction conflit

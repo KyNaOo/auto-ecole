@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use function Symfony\Component\String\s;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -276,6 +277,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
+    }
+    public function getAllMoniteur(){
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT email 
+                FROM user 
+                WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function findUsersByRole(String $role)
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%');
+
+        return $qb->getQuery()->getResult();
     }
 
     public function getMoniteurMaxUse()

@@ -44,7 +44,9 @@ class AdminController extends AbstractController
         $boolVeh = false;
         $result1 = $userRepository->getMoniteurMaxUse();
         $result2 = $userRepository->getVehiculeMaxUse();
+        //dd($userRepository->findUsersByRole("ROLE_MONITEUR"));
 //        dd($result2);
+        //conflit
         if (count($result1)>1){
             $boolMono = true;
         }
