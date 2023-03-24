@@ -23,7 +23,7 @@
         let nbLecon = [];
         let nom = [];
         {% for i in result2 %}
-            nbLecon.push({{ i.cbLecons }});
+            nbLecon.push({{ i.nbLecons }});
             nom.push("{{ i.nom }}")
         {% endfor %}
 
@@ -53,7 +53,7 @@
                         title:
                             {
                                 display:true,
-                                text:'mon joli graph'
+                                text:'Nombre de lecon par modele'
                             },
                         legend:
                             {
@@ -76,9 +76,9 @@
                             [
                                 {
                                     label:'nombre de votes',
-                                    data: [nbLecon],
+                                    data: nbLecon,
                                     //data: [1,2],
-                                    borderColor:'red',
+                                    // borderColor:'red',
                                     //les points
                                     backgroundColor:['red','blue']
                                 }
@@ -89,7 +89,7 @@
                         title:
                             {
                                 display:true,
-                                text:'mon joli graph'
+                                text:'Nombre de lecon par moniteur'
                             },
                         legend:
                             {

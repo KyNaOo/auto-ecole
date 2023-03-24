@@ -83,17 +83,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function nbLeconMoniteur(int $userId)
     {
+//        $em = $this->getEntityManager();
+//
+//        $query = $em->createQuery('
+//           SELECT l, count(u.id)
+//           FROM App\Entity\Lecon l
+//           JOIN l.codeuser u
+//           WHERE u.id = :id
+//        ')->setParameter('id', $userId);
+//
+//        return $query->getResult();
         //pour eleve
         //nombre de lecon par moniteur
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT um.nom, COUNT(l.id) as cbLecons
-                FROM lecon l
-                INNER JOIN lecon_user lu ON lu.lecon_id = l.id
-                INNER JOIN user um ON um.id=lu.user_id
-                INNER JOIN user ue ON ue.id = lu.user_id
-                WHERE ue.id = :userId
-                GROUP BY um.nom";
+        $sql = "SELECT u.nom as nom, COUNT(lecon_id) as nbLecons
+                from lecon l
+                INNER JOIN lecon_user lu on l.id = lu.lecon_id
+                INNER JOIN user u on lu.user_id = u.id
+                WHERE lecon_id IN (SELECT lecon.id
+                                   FROM lecon
+                                    INNER JOIN lecon_user  on lecon.id = lecon_user.lecon_id
+                                   WHERE user_id = :userId
+                                   )
+                AND user_id not like :userId
+                GROUP by u.nom
+                ";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
         $stmt = $conn->prepare($sql);
@@ -101,6 +116,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $resultSet = $stmt->executeQuery(['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
+
+
     }
 
     public function prixCateg(int $userId)
@@ -133,12 +150,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $sql = "SELECT c.libelle as libelle2, COUNT(c.id) as nb
                 FROM categorie c
-                INNER JOIN vehicule v ON v.id=l.codevehicule_id
+                INNER JOIN vehicule v ON c.id=v.codecategorie_id
                 INNER JOIN lecon l ON l.codevehicule_id = v.id
                 INNER JOIN lecon_user lu ON lu.lecon_id = l.id
                 INNER JOIN user um ON um.id=lu.user_id
                 WHERE um.id=:userId
-                AND JSON_CONTAINS(roles,'ROLE_MONITEUR')
                 GROUP BY c.libelle";
 
         $stmt = $conn->prepare($sql);
@@ -221,6 +237,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                           WHERE user.id = :userId
                           GROUP by lecon.codevehicule_id)AS temp)";
 
+//        SELECT u.nom, COUNT(lecon_id) as nbLecon
+//from lecon l
+//INNER JOIN lecon_user lu on l.id = lu.lecon_id
+//INNER JOIN user u on lu.user_id = u.id
+//WHERE lecon_id IN (SELECT lecon.id
+//                   FROM lecon
+//                    INNER JOIN lecon_user  on lecon.id = lecon_user.lecon_id
+//                   WHERE user_id = 3
+//                   )
+//AND user_id not like 3
+//GROUP by u.nom;
         $stmt = $conn->prepare($sql);
 
         $resultSet = $stmt->executeQuery(['userId'=>$userId]);

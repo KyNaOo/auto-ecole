@@ -124,8 +124,14 @@ class UserController extends AbstractController
     {
         $result = $userRepository->nbCategorie($this->getUser()->getId());
         $result2 = $userRepository->nbLeconMoniteur($this->getUser()->getId());
+//        dd($result2);
 
-        //dd($result);
+//        foreach ($result2 as $lecon){
+//            foreach ($lecon->getCodeuser() as $user){
+//                dump($user);
+//            }
+//
+//        }
         return $this->render('user/graph.html.twig', [
             'result'=>$result,
             'result2'=>$result2
