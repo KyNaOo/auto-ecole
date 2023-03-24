@@ -150,12 +150,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $sql = "SELECT c.libelle as libelle2, COUNT(c.id) as nb
                 FROM categorie c
-                INNER JOIN vehicule v ON v.id=l.codevehicule_id
+                INNER JOIN vehicule v ON c.id=v.codecategorie_id
                 INNER JOIN lecon l ON l.codevehicule_id = v.id
                 INNER JOIN lecon_user lu ON lu.lecon_id = l.id
                 INNER JOIN user um ON um.id=lu.user_id
                 WHERE um.id=:userId
-                AND JSON_CONTAINS(roles,'ROLE_MONITEUR')
                 GROUP BY c.libelle";
 
         $stmt = $conn->prepare($sql);

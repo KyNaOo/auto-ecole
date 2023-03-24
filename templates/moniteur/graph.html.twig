@@ -34,7 +34,7 @@
         let graph = new Chart
         (ctx,
             {
-                type:"bar",
+                type:"pie",
                 data:
                     {
                         labels:labelle,
@@ -52,7 +52,7 @@
                         title:
                             {
                                 display:true,
-                                text:'mon joli graph'
+                                text:'prix par categorie'
                             },
                         legend:
                             {
@@ -74,9 +74,9 @@
                             [
                                 {
                                     label:'nombre de votes',
-                                    data: [nb],
+                                    data: nb,
                                     //data: [1,2],
-                                    borderColor:'red',
+                                    // borderColor:'red',
                                     //les points
                                     backgroundColor:['red','blue']
                                 }
@@ -87,7 +87,7 @@
                         title:
                             {
                                 display:true,
-                                text:'mon joli graph'
+                                text:'nombre de lecon par categorie'
                             },
                         legend:
                             {
