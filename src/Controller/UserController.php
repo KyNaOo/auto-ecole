@@ -139,15 +139,22 @@ class UserController extends AbstractController
         $result2 = $userRepository->getMontantRestant($this->getUser()->getId());
         $result3 = $userRepository->getNbLeconByEleve($this->getUser()->getId());
         $result4 = $userRepository->getVehiculeUseByEleve($this->getUser()->getId());
-
+//        dd($result4);
+        $boolCountVeh = false;
         $nbLecon = $result3[0]["nbLecon"];
         $prixRestant = $result2[0]["prixRestant"];
         $prixPermis = $result1[0]["prix"];
+        if (count($result4)>1){
+            $boolCountVeh = true;
+        }
+        $countVeh = $result4[0]['nbLecon'];
         return $this->render('user/stats.html.twig', [
             'prix'=>$prixPermis,
             'prixRestant'=>$prixRestant,
             'nbLecon'=>$nbLecon,
             'vehicules'=>$result4,
+            'verifVeh'=>$boolCountVeh,
+            'nbUseVeh'=>$countVeh,
         ]);
     }
 }

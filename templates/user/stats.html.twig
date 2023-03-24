@@ -1,7 +1,151 @@
-Montant total des lecons prises : {{ prix }}€ <br>
-Montant restant à payer : {{ prixRestant }}€ <br>
-Nombre de leçon total (passées et réservées) : {{ nbLecon }} <br>
-Le ou les véhicule(s) que vous avez le plus utilisé :
-{% for vehicule in vehicules %}
-    {{ vehicule['Marque'] }} - {{ vehicule['Modele'] }} - nombre de lecon : {{ vehicule['nbLecon'] }}
-{% endfor %}
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="fr"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <title>Stats</title>
+    {% block stylesheets %}
+        {#        <link rel="stylesheet" type="text/css" href="styles/nicepage-site.css" />#}
+    {% endblock %}
+    <link rel="stylesheet" href="//capp.nicepage.com/4d5cf6d5208ae29cda67890101fc5a74a9c3f7d3/nicepage.css" media="screen">
+    {#    <link rel="stylesheet" href="styles/nicepage-site.css" media="screen">#}
+    <link rel="stylesheet" href="{{ asset('styles/Accueil.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/nicepage-site.css') }}">
+    {#    <link rel="stylesheet" href="styles/Accueil.css" media="screen">#}
+    <script class="u-script" type="text/javascript" src="//capp.nicepage.com/assets/jquery-3.5.1.min.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="//capp.nicepage.com/4d5cf6d5208ae29cda67890101fc5a74a9c3f7d3/nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 5.6.2, nicepage.com">
+
+    <script type="application/ld+json">{
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": ""
+        }</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Accueil">
+    <meta property="og:type" content="website">
+</head>
+<body class="u-body u-xl-mode"    data-lang="fr"><header class="u-clearfix u-header u-header" id="sec-fabd"><div class="u-clearfix u-sheet u-sheet-1">
+
+    </div></header>
+<section class="u-align-left u-clearfix u-section-1" id="carousel_8074">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <h2 class="u-custom-font u-font-montserrat u-text u-text-black u-text-1"> Vos statistiques numériques</h2>
+        <div class="u-clearfix u-layout-wrap u-layout-wrap-1">
+            <div class="u-layout">
+                <div class="u-layout-row">
+                    <div class="u-size-60">
+                        <div class="u-layout-col">
+                            <div class="u-size-20">
+                                <div class="u-layout-row">
+                                    <div class="u-align-center u-container-style u-layout-cell u-size-13 u-layout-cell-1">
+                                        <div class="u-container-layout u-valign-top u-container-layout-1">
+                                            <div class="u-align-center u-container-style u-group u-palette-3-base u-preserve-proportions u-shape-circle u-group-1">
+                                                <div class="u-container-layout u-valign-middle">
+                                                    <h3 class="u-custom-font u-font-montserrat u-text u-text-2" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">
+                                                      {{ nbLecon }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-container-style u-layout-cell u-shape-rectangle u-size-47 u-layout-cell-2">
+                                        <div class="u-container-layout u-valign-middle u-container-layout-3">
+                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-3">
+                                                Vous avez passé un total de {{ nbLecon }} lecon(s) dans notre AutoEcole
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-size-20">
+                                <div class="u-layout-row">
+                                    <div class="u-align-center u-container-style u-layout-cell u-size-13 u-layout-cell-3">
+                                        <div class="u-container-layout u-valign-top u-container-layout-4">
+                                            <div class="u-align-center u-container-style u-group u-palette-3-base u-preserve-proportions u-shape-circle u-group-2">
+                                                <div class="u-container-layout u-valign-middle">
+                                                    <h3 class="u-custom-font u-font-montserrat u-text u-text-4" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">
+                                                                                                                {{ nbUseVeh }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-container-style u-layout-cell u-size-47 u-layout-cell-4">
+                                        <div class="u-container-layout u-valign-middle u-container-layout-6">
+                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-5">
+                                                {% if verifVeh == true %} les vehicules que vous avez le plus utilisé sont
+                                                    {% for vehicule in vehicules %}
+                                                    '{{ vehicule['Marque'] }} - {{ vehicule['Modele'] }}',
+                                                    {% endfor %}
+                                                    Ils ont été utilisés {{ nbUseVeh }} fois.
+                                                {% else %}
+                                                    Le vehicule que vous avez le plus utilisé est
+                                                    {% for vehicule in vehicules %}
+                                                        '{{ vehicule['Marque'] }} - {{ vehicule['Modele'] }}',
+                                                    {% endfor %}
+                                                    Il a été utilisé {{ nbUseVeh }} fois.
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="u-size-20">
+                                <div class="u-layout-row">
+                                    <div class="u-align-center u-container-style u-layout-cell u-size-13 u-layout-cell-3">
+                                        <div class="u-container-layout u-valign-top u-container-layout-4">
+                                            <div class="u-align-center u-container-style u-group u-palette-3-base u-preserve-proportions u-shape-circle u-group-2">
+                                                <div class="u-container-layout u-valign-middle">
+                                                    <h3 class="u-custom-font u-font-montserrat u-text u-text-4" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">
+                                                    {{ prixRestant }}€
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-container-style u-layout-cell u-size-47 u-layout-cell-4">
+                                        <div class="u-container-layout u-valign-middle u-container-layout-6">
+                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-5">
+                                                Le prix restant à payer parmis les leçons que vous n'avez pas encore reglé est de {{ prixRestant }}€
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="u-size-20">
+                                <div class="u-layout-row">
+                                    <div class="u-align-center u-container-style u-layout-cell u-size-13 u-layout-cell-3">
+                                        <div class="u-container-layout u-valign-top u-container-layout-4">
+                                            <div class="u-align-center u-container-style u-group u-palette-3-base u-preserve-proportions u-shape-circle u-group-2">
+                                                <div class="u-container-layout u-valign-middle">
+                                                    <h3 class="u-custom-font u-font-montserrat u-text u-text-4" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">
+                                                    {{ prix }}€
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-container-style u-layout-cell u-size-47 u-layout-cell-4">
+                                        <div class="u-container-layout u-valign-middle u-container-layout-6">
+                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-5">
+                                            Le prix total de votre permis est actuellement de {{ prix }}€.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body></html>

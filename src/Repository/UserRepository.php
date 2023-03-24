@@ -215,6 +215,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 SELECT MAX(nb)
                     FROM (SELECT COUNT(lecon.id)AS nb
                           FROM lecon
+                          INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
+                          INNER JOIN user ON user.id = lecon_user.user_id
+                          WHERE user.id = :userId
                           GROUP by lecon.codevehicule_id)AS temp)";
 
         $stmt = $conn->prepare($sql);
