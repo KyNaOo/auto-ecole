@@ -53,6 +53,22 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
         return $resultSet->fetchAllAssociative();
     }
 
+    public function findConflictingLessons(Lecon $lesson): array
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->where('l.dateStart < :end_time')
+            ->andWhere('l.dateEnd > :start_time')
+            ->setParameter('start_time', $lesson->getDateStart())
+            ->setParameter('end_time', $lesson->getDateEnd());
+
+        if ($lesson->getId()) {
+            $qb->andWhere('l.id != :id')
+                ->setParameter('id', $lesson->getId());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function userCalendar(int $idUser){
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery('SELECT l FROM App\Entity\Lecon l JOIN l.codeuser lc WHERE lc.id= ?1')->setParameter('1',$idUser);

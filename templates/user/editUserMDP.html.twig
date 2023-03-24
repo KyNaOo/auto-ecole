@@ -1,14 +1,63 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
 <script src="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.js"></script>
-<div class="grix xs2">
-    <div>Email</div>
-    <div>{{ app.user.email }}</div>
+<head>
+    <title>Changement de mot de passe</title>
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+    }
+    h1 {
+        text-align: center;
+        margin-top: 50px;
+        color: #333;
+    }
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+        color: #333;
+    }
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+        font-size: 16px;
+        color: #333;
+    }
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button[type="submit"]:hover {
+        background-color: #3e8e41;
+    }
+</style>
+</head>
+<body>
     {% for message in app.flashes('error') %}
         <div class="col-xs4">
             <div class="p-3 my-2 rounded-1 red light-4 text-red text-dark-4">{{ message }}</div>
         </div>
     {% endfor %}
-    <div>Mot de passe</div>
+    <h1>Change ton mot de passe</h1>
     <form method="post">
         <div class="form-field">
             <label for="pass">Mot de passe</label>
@@ -18,6 +67,6 @@
             <label for="pass2">Confirmer le mot de passe</label>
             <input type="password" id="pass2" name="pass2" class="form-control">
         </div>
-        <button class="btn shadow-1 rounded-1 blue">Modifier le mot de passe</button>
+        <button class="btn shadow-1 rounded-1 blue" type="submit">Modifier le mot de passe</button>
     </form>
-</div>
+</body>

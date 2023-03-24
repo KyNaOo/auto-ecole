@@ -7,6 +7,7 @@
         {{ parent() }}
     {% endblock %}
     <h1>Create new Lecon</h1>
+    <h1>{{ app.flashes('error') }}</h1>
 
     {{ include('lecon/_form.html.twig') }}
 
