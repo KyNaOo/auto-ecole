@@ -1,0 +1,109 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}GRAPHIQUE{% endblock %}
+
+{% block body %}
+    {% block admin %}
+        {{ parent() }}
+    {% endblock %}
+
+
+
+    <canvas id="monGraph" width="400" height="100"></canvas>
+    <canvas id="monGraph2" width="400" height="100"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let somme = [];
+        let labelle=[];
+        {% for i in result %}
+        somme.push({{ i.nbLecon }});
+        labelle.push("{{ i.modele }}");
+        {% endfor %}
+
+        let nb = [];
+        let labelle2=[];
+        {% for i in result2 %}
+        nb.push({{ i.nbLecon2 }});
+        labelle2.push("{{ i.nom }}");
+        {% endfor %}
+
+        let ctx=document.querySelector("#monGraph")
+        let ctx2=document.querySelector("#monGraph2")
+
+
+        let graph = new Chart
+        (ctx,
+            {
+                type:"bar",
+                data:
+                    {
+                        labels:labelle,
+                        datasets:
+                            [
+                                {
+                                    label:'nombre de lecon',
+                                    data: somme,
+                                    backgroundColor:['red','blue','purple']
+                                }
+                            ]
+                    },
+                options:
+                    {
+                        title:
+                            {
+                                display:true,
+                                text:'nombre de lecon par modele'
+                            },
+                        scales: {
+                            yAxes: [{
+                                display: true,
+                                ticks: {
+                                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                                    // OR //
+                                    beginAtZero: true   // minimum value will be 0.
+                                }
+                            }]
+                        }
+
+                    }
+            }
+        )
+
+        let graph2 = new Chart
+        (ctx2,
+            {
+                type:"pie",
+                data:
+                    {
+                        labels:labelle2,
+                        datasets:
+                            [
+                                {
+                                    label:'nombre de votes',
+                                    data: nb,
+                                    //data: [1,2],
+                                    // borderColor:'red',
+                                    //les points
+                                    backgroundColor:['red','blue']
+                                }
+                            ]
+                    },
+                options:
+                    {
+                        title:
+                            {
+                                display:true,
+                                text:'nombre de lecon par moniteur'
+                            },
+                        legend:
+                            {
+                                position:'bottom'
+                            }
+
+                    }
+            }
+        )
+    </script>
+
+
+{% endblock %}

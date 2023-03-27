@@ -375,7 +375,43 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $resultSet->fetchAllAssociative();
     }
+    public function nbLeconByModele()
+    {
+        //prix par categorie
+        //pour moni
+        $conn = $this->getEntityManager()->getConnection();
 
+        $sql = "SELECT vehicule.modele, COUNT(lecon.id)AS nbLecon
+                FROM vehicule
+                INNER JOIN lecon ON lecon.codevehicule_id=vehicule.id
+                GROUP BY vehicule.modele";
+//        AND um.roles LIKE '%ROLE_ADMIN%'
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+    public function nbLeconByMoniteur()
+    {
+        //prix par categorie
+        //pour moni
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT user.nom, COUNT(lecon_user.user_id)AS nbLecon2
+                FROM user
+                INNER JOIN lecon_user ON lecon_user.user_id=user.id
+                WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')
+                GROUP BY user.nom";
+//        AND um.roles LIKE '%ROLE_ADMIN%'
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
 
 //SELECT um.nom, COUNT(l.id)/2
 //FROM lecon l

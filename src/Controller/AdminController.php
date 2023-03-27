@@ -65,6 +65,17 @@ class AdminController extends AbstractController
             'verifCountVeh'=>$boolVeh,
         ]);
     }
+    #[Route('/admin/graph', name: 'app_admin_graph', methods: ['GET'])]
+    public function graphMoni(UserRepository $userRepository): Response
+    {
+        $result = $userRepository->nbLeconByModele();
+        $result2 = $userRepository->nbLeconByMoniteur();
+        //dd($result);
+        return $this->render('admin/graph.html.twig', [
+            'result'=>$result,
+            'result2'=>$result2
 
+        ]);
+    }
 
 }
