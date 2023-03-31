@@ -43,6 +43,7 @@ security:
         - { path: ^/lecon, roles: ROLE_ADMIN }
         - { path: ^/vehicule, roles: ROLE_ADMIN }
         - { path: ^/licence, roles: ROLE_ADMIN }
+        - { path: ^/lecon/new, roles: ROLE_DEV }
 
 when@test:
     security:

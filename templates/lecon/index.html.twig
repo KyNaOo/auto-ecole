@@ -13,7 +13,7 @@
             <tr>
                 <th>Reglée</th>
                 <th>Debut</th>
-                <th>Fin</th>
+{#                <th>Fin</th>#}
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,7 +22,7 @@
             <tr>
                 <td>{{ lecon.reglee }}</td>
                 <td>{{ lecon.dateStart ? lecon.dateStart|date('Y-m-d H:i:s'):'' }}</td>
-                <td>{{ lecon.dateEnd ? lecon.dateEnd|date('Y-m-d H:i:s'):''}}</td>
+{#                <td>{{ lecon.dateEnd ? lecon.dateEnd|date('Y-m-d H:i:s'):''}}</td>#}
                 <td>
                     <a href="{{ path('app_lecon_show', {'id': lecon.id}) }}">show</a>
                     <a href="{{ path('app_lecon_edit', {'id': lecon.id}) }}">edit</a>
@@ -36,5 +36,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_lecon_new') }}">Create new</a>
+{#    <a href="{{ path('app_lecon_new') }}">Create new</a>#}
 {% endblock %}
