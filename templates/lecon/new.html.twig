@@ -7,7 +7,13 @@
         {{ parent() }}
     {% endblock %}
     <h1>Create new Lecon</h1>
-    <h1>{{ app.flashes('error') }}</h1>
+    {% if app.flashes('error') %}
+        <div class="alert alert-danger">
+            {% for message in app.flashes('error') %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
     {{ include('lecon/_form.html.twig') }}
 

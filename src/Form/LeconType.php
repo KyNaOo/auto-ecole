@@ -7,13 +7,15 @@ use App\Entity\Lecon;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 
 class LeconType extends AbstractType
@@ -22,10 +24,13 @@ class LeconType extends AbstractType
     {
         $builder
             ->add('dateStart',DateTimeType::class,[
-                'date_widget'=>'single_text'
-            ])
-            ->add('dateEnd',DateTimeType::class,[
-                'date_widget'=>'single_text'
+                'date_widget'=>'single_text',
+                'time_widget'=>'choice',
+                'hours'=> range(8,17),
+                'constraints'=>[
+                    new GreaterThanOrEqual(['value'=>'today','message'=>'Vous ne pouvez pas sélectionner une date antérieure!'])
+                ],
+                'data'=>(new \DateTime())->setTime(8,0)
             ])
 
             ->add('codevehicule',null, [

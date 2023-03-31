@@ -3,8 +3,14 @@
 {% block title %}New Lecon{% endblock %}
 
 {% block body %}
+    {% if app.session.flashbag.has('error') %}
+            {% for message in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                {{ message }}
+                </div>
+            {% endfor %}
+    {% endif %}
     <h1>S'inscrire à une leçon</h1>
-
     {{ include('lecon/_form.html.twig') }}
 
     <a href="{{ path('app_user') }}">Retour</a>

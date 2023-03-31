@@ -78,14 +78,27 @@ class UserController extends AbstractController
         $lecon = new Lecon();
         $form = $this->createForm(LeconType::class, $lecon);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $moniteur=$userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]);
-            $lecon->addCodeuser($user);
-            $lecon->addCodeuser($moniteur);
-            $leconRepository->save($lecon, true);
-            return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted()) {
+            // Call the findConflictingLessons function to check for conflicts
+            $conflictingLessons = $leconRepository->findConflictingLessons($lecon);
+            if (!empty($conflictingLessons)) {
+                // If there are conflicts, add a flash message and return to the form
+                //$error = "Il y a déjà une leçon à cette date/heure!";
+                $this->addFlash('error','Il y a déjà une leçon à cette date/heure');
+                return $this->renderForm('lecon/newLecon.html.twig', [
+                    'lecon' => $lecon,
+                    'form' => $form,
+                    'user' => $user
+                ]);
+            }
+        if ($form->isValid()) {
+                $moniteur=$userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]);
+                $lecon->addCodeuser($user);
+                $lecon->addCodeuser($moniteur);
+                $leconRepository->save($lecon, true);
+                return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
         }
-
+    }
         return $this->renderForm('lecon/newLecon.html.twig', [
             'lecon' => $lecon,
             'form' => $form,
@@ -94,17 +107,17 @@ class UserController extends AbstractController
     }
 
     //Planning
-    #[Route('/user/planning', name: 'app_user_planning', methods: ['GET'])]
+    #[Route('/user/planningE', name: 'app_user_planning', methods: ['GET'])]
     public function planningUser(UserRepository $userRepository, LeconRepository $leconRepository): Response
     {
         $event = $leconRepository->userCalendar($this->getUser()->getId());
         //$event= $leconRepository->findByExampleField($this->getUser()->getId());
         $lecon = [];
-        foreach ($event as $event){
+        foreach ($event as $lalecon){
             $lecon[]=[
-                'id'=>$event->getId(),
-                'start'=>$event->getDateStart()->format('Y-m-d H:i:s'),
-                'end'=>$event->getDateEnd()->format('Y-m-d H:i:s'),
+                'id'=>$lalecon->getId(),
+                'start'=>$lalecon->getDateStart()->format('Y-m-d H:i:s'),
+                'end'=>$lalecon->getDateStart()->modify('+1 hour')->format('Y-m-d H:i:s'),
                 'title'=>"COURS",
                 'backgroundColor'=>"rgb(0, 255, 0)",
                 'borderColor'=>"pink",

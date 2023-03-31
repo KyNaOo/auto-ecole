@@ -119,11 +119,11 @@ class MoniteurController extends AbstractController
         $event = $leconRepository->userCalendar($this->getUser()->getId());
         //$event= $leconRepository->findByExampleField($this->getUser()->getId());
         $lecon = [];
-        foreach ($event as $event){
+        foreach ($event as $lalecon){
             $lecon[]=[
-                'id'=>$event->getId(),
-                'start'=>$event->getDateStart()->format('Y-m-d H:i:s'),
-                'end'=>$event->getDateEnd()->format('Y-m-d H:i:s'),
+                'id'=>$lalecon->getId(),
+                'start'=>$lalecon->getDateStart()->format('Y-m-d H:i:s'),
+                'end'=>$lalecon->getDateStart()->modify('+1 hour')->format('Y-m-d H:i:s'),
                 'title'=>"COURS",
                 'backgroundColor'=>"rgb(0, 255, 0)",
                 'borderColor'=>"pink",

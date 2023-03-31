@@ -27,9 +27,6 @@ class Lecon
     private Collection $codeuser;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateEnd = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateStart = null;
 
     public function __construct()
@@ -110,18 +107,6 @@ class Lecon
     public function removeCodeuser(User $codeuser): self
     {
         $this->codeuser->removeElement($codeuser);
-
-        return $this;
-    }
-
-    public function getDateEnd(): ?\DateTimeInterface
-    {
-        return $this->dateEnd;
-    }
-
-    public function setDateEnd(\DateTimeInterface $dateEnd): self
-    {
-        $this->dateEnd = $dateEnd;
 
         return $this;
     }

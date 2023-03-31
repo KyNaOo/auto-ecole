@@ -56,10 +56,8 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
     public function findConflictingLessons(Lecon $lesson): array
     {
         $qb = $this->createQueryBuilder('l')
-            ->where('l.dateStart < :end_time')
-            ->andWhere('l.dateEnd > :start_time')
-            ->setParameter('start_time', $lesson->getDateStart())
-            ->setParameter('end_time', $lesson->getDateEnd());
+            ->where('l.dateStart = :start_time')
+            ->setParameter('start_time', $lesson->getDateStart());
 
         if ($lesson->getId()) {
             $qb->andWhere('l.id != :id')
