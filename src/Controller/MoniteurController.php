@@ -93,7 +93,8 @@ class MoniteurController extends AbstractController
         $result3 = $userRepository->getNbLeconByMoniByCateg($this->getUser()->getId());
         $nbLecon = $result1[0]["nbLecon"];
         $CATot = $result2[0]["CATot"];
-        return $this->render('user/statsMoniteur.html.twig', [
+//        dd($result3);
+        return $this->render('moniteur/statsMoniteur.html.twig', [
             'nbLecon'=>$nbLecon,
             'CATot'=>$CATot,
             'categories'=>$result3,
