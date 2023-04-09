@@ -49,13 +49,12 @@
                                     </div>
                                     <div class="u-container-style u-layout-cell u-shape-rectangle u-size-47 u-layout-cell-2">
                                         <div class="u-container-layout u-valign-middle u-container-layout-3">
-                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-3">{% if verifCountMono == true%}Les moniteurs les  plus solicités sont :
+                                            <p class="u-custom-font u-heading-font u-text u-text-grey-40 u-text-3">{% if verifCountMono == true%}Les moniteurs les plus solicités sont :
                                                 {% for moniteur in moniteurs %}
                                                 '{{ moniteur['nom'] }}',
                                             {% endfor %}
-                                            ils ont été appelé {% for moniteur in moniteurs %}
-                                                {{ moniteur['nbLecon'] }},
-                                            {% endfor %}
+                                            ils ont été appelés
+                                                    {{ nbUseMono }}
                                             fois.
                                                 {% else %}
                                                 Le moniteur le  plus solicité est :

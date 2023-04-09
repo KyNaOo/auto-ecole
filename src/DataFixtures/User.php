@@ -10,42 +10,71 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class User extends Fixture
 {
     private UserPasswordHasherInterface $hasher;
-    private $EncoderPassword;
 
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        $this->hasher= $passwordHasher;
+        $this->hasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
     {
-        $user =new \App\Entity\User();
-        $this->loadAdmin($manager);
-        $this->loadUser($manager, ["ROLE_ADMIN"], 1, "admin");
-        $this->loadUser($manager, ["ROLE_MONITEUR"], 10, "moniteur");
-        $this->loadUser($manager, ["ROLE_USER"], 50, "user");
+        $faker = Factory::create('fr_FR');
+        $roles = ["ROLE_USER","ROLE_MONITEUR"];
+        $count = 0;
 
-//        $user->setEmail("yacob.tra@gmail.com")->setPassword("1234");
-//        $manager->flush();
-    }
-        public function loadUser(ObjectManager $manager, array $role, int $nbEntite, String $motdepasse): void{
-            $faker = Factory::create();
-
-            for($i = 1; $i <= $nbEntite; $i++){
-                $user=new User();
-                $user->setEmail($faker->email());
-                $user->setNom($faker->lastName());
-                $user->setPrenom($faker->firstName());
-                $user->setPassword($this->hasher->hashPassword($user, $motdepasse));
-                $user->setSexe("homme");
-                $user->setRoles($role);
-                $manager->persist($user);
-            }
-            $manager->flush();
+        $validPostCode= function ($postCode) {
+            return strlen($postCode) === 5;
+        };
+        while ($count<40) {
+            $user = new \App\Entity\User();
+            $user->setEmail($faker->unique()->email())
+                ->setNom($faker->lastName)
+                ->setPrenom($faker->firstName)
+                ->setDateNaissance($faker->dateTimeBetween('-60 years', '-18 years'))
+                ->setAdresse($faker->streetAddress)
+                ->setVille($faker->city)
+                ->setCodepostale($faker->valid($validPostCode)->postcode)
+                ->setTelephone($faker->e164PhoneNumber)
+                ->setSexe($faker->numberBetween(0, 2))
+            ;
+            $user->setPassword($this->hasher->hashPassword($user, $faker->password));
+            $user->setRoles((array)$roles[random_int(0, 1)]);
+            $user->setIsVerified(random_int(0, 1));
+            $manager->persist($user);
+            ++$count;
         }
+        $user2 = $this->addUser('qinhao@wu.com', ['ROLE_USER']);
+        $manager->persist($user2);
+        $user3 = $this->addUser('jacob@trabelsi.com', ['ROLE_MONITEUR']);
+        $manager->persist($user3);
+        $user4 = $this->addUser('ethanbellaiche0@gmail.com', ['ROLE_ADMIN']);
+        $manager->persist($user4);
 
-//    private function loadUser(ObjectManager $manager, array $role, int $nbItem, string $password){
-//        $user=new User();
-//        $faker = Factory::create
-//    }
+
+
+        $manager->flush();
+    }
+public function addUser(string $email, array $role){
+    $validPostCode= function ($postCode) {
+        return strlen($postCode) === 5;
+    };
+    $faker = Factory::create('fr_FR');
+    $user = new \App\Entity\User();
+    $user->setEmail($email)
+        ->setRoles($role)
+        ->setNom($faker->lastName)
+        ->setPrenom($faker->firstName)
+        ->setDateNaissance($faker->dateTimeBetween('-60 years', '-18 years'))
+        ->setAdresse($faker->streetAddress)
+        ->setVille($faker->city)
+        ->setCodepostale($faker->valid($validPostCode)->postcode)
+        ->setTelephone($faker->e164PhoneNumber)
+        ->setSexe($faker->randomElement(['Femme', 'Homme', 'Autre', 'Ne se prononce pas']))
+        ->setDatenaissance($faker->dateTimeInInterval($startDate = '- 80 years', $interval = '- 18 years', $timezone = null));
+    $user->setPassword($this->hasher->hashPassword($user, 'azerty123'));
+    return $user;
+}
+    public function getOrder(): int {
+        return 1;
+    }
 }
