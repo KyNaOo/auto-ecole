@@ -39,11 +39,13 @@ class LicenceRepository extends ServiceEntityRepository
         }
     }
 
-    public function findConflictingLicense(Licence $licence): array
+    public function findConflictingLicenses(Licence $licence, int $userId): array
     {
         $qb = $this->createQueryBuilder('l')
-            ->where('l.codecategorie = :start_time')
-            ->setParameter('start_time', $licence->getCodecategorie());
+            ->andWhere('l.codeuser = :user')
+            ->andWhere('l.codecategorie = :categorie')
+            ->setParameter('user', $userId)
+            ->setParameter('categorie', $licence->getCodecategorie());
 
         if ($licence->getId()) {
             $qb->andWhere('l.id != :id')
@@ -51,6 +53,12 @@ class LicenceRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function userLicence(int $idUser){
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery('SELECT l FROM App\Entity\Licence l JOIN l.codeuser lc WHERE lc.id= ?1')->setParameter('1',$idUser);
+        return $query->getResult();
     }
 //    /**
 //     * @return Licence[] Returns an array of Licence objects

@@ -1,0 +1,22 @@
+{% block body %}
+    <h1>Vos licences</h1>
+    <table class="table">
+        <tbody>
+        {% for licence in licences %}
+        <tr>
+            <th>Id</th>
+            <td>{{ licence.id }}</td>
+        </tr>
+        <tr>
+            <th>Codecategorie</th>
+            <td>{{ licence.codecategorie }}</td>
+        </tr>
+        <tr>
+            <th>Dateobtention</th>
+            <td>{{ licence.dateobtention ? licence.dateobtention|date('Y-m-d') : '' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('app_moniteur') }}">Retour</a>
+{% endblock %}

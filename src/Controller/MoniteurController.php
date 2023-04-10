@@ -73,7 +73,7 @@ class MoniteurController extends AbstractController
         $form = $this->createForm(LicenceType::class, $licence);
         $form->handleRequest($request);
         if($form->isSubmitted()){
-            $lconflict = $licenceconflict->findConflictingLicense($licence);
+            $lconflict = $licenceconflict->findConflictingLicenses($licence, $this->getUser()->getId());
             if(!empty($lconflict)){
                 $this->addFlash('error','Vous avez déjà cette licence');
                 return $this->renderForm('moniteur/addLicence.html.twig', [
@@ -87,11 +87,23 @@ class MoniteurController extends AbstractController
                 $entityManager->persist($licence);
                 $entityManager->flush();
                 $this->addFlash('message', 'Ajout effectué');
+                return $this->redirectToRoute('app_moniteur', [], Response::HTTP_SEE_OTHER);
             }
         }
         return $this->renderForm('moniteur/addLicence.html.twig', [
             'licence' => $licence,
             'form' => $form
+        ]);
+    }
+
+    #[Route('/moniteur/VosLicences', name: 'app_listLicence')]
+    public function listLicence(\Symfony\Component\HttpFoundation\Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, LicenceRepository $licenceconflict): Response
+    {
+        // dd($user->getId());
+        $lesLicences = $licenceconflict->userLicence($this->getUser()->getId());
+
+        return $this->renderForm('moniteur/showLicence.html.twig', [
+            'licences' => $lesLicences
         ]);
     }
 

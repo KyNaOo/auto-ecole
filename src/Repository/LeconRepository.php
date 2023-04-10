@@ -53,11 +53,14 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findConflictingLessons(Lecon $lesson): array
+    public function findConflictingLessons(Lecon $lesson, int $userId): array
     {
         $qb = $this->createQueryBuilder('l')
+            ->join('l.codeuser', 'u')
             ->where('l.dateStart = :start_time')
-            ->setParameter('start_time', $lesson->getDateStart());
+            ->andWhere('u.id = :user_id')
+            ->setParameter('start_time', $lesson->getDateStart())
+            ->setParameter('user_id', $userId);
 
         if ($lesson->getId()) {
             $qb->andWhere('l.id != :id')

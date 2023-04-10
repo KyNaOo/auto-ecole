@@ -79,10 +79,8 @@ class UserController extends AbstractController
         $form = $this->createForm(LeconType::class, $lecon);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            // Call the findConflictingLessons function to check for conflicts
-            $conflictingLessons = $leconRepository->findConflictingLessons($lecon);
+            $conflictingLessons = $leconRepository->findConflictingLessons($lecon, $this->getUser()->getId());
             if (!empty($conflictingLessons)) {
-                // If there are conflicts, add a flash message and return to the form
                 //$error = "Il y a déjà une leçon à cette date/heure!";
                 $this->addFlash('error','Il y a déjà une leçon à cette date/heure');
                 return $this->renderForm('lecon/newLecon.html.twig', [
