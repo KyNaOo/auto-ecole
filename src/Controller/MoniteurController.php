@@ -6,6 +6,7 @@ use App\Entity\Licence;
 use App\Entity\User;
 use App\Form\LicenceType;
 use App\Repository\LeconRepository;
+use App\Repository\LicenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,21 +65,30 @@ class MoniteurController extends AbstractController
     }
 
     #[Route('/moniteur/addLicence', name: 'app_addLicence')]
-    public function addLicence(\Symfony\Component\HttpFoundation\Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function addLicence(\Symfony\Component\HttpFoundation\Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, LicenceRepository $licenceconflict): Response
     {
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $this->getUser()->getUserIdentifier()]);
        // dd($user->getId());
         $licence = new Licence();
         $form = $this->createForm(LicenceType::class, $licence);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $licence->setCodeuser($user);
-            $entityManager->persist($licence);
-            $entityManager->flush();
-            $this->addFlash('message', 'Ajout effectué');
+        if($form->isSubmitted()){
+            $lconflict = $licenceconflict->findConflictingLicense($licence);
+            if(!empty($lconflict)){
+                $this->addFlash('error','Vous avez déjà cette licence');
+                return $this->renderForm('moniteur/addLicence.html.twig', [
+                    'lecon' => $licence,
+                    'form' => $form,
+                    'user' => $user
+                ]);
+            }
+            if ($form->isSubmitted() && $form->isValid()) {
+                $licence->setCodeuser($user);
+                $entityManager->persist($licence);
+                $entityManager->flush();
+                $this->addFlash('message', 'Ajout effectué');
+            }
         }
-
         return $this->renderForm('moniteur/addLicence.html.twig', [
             'licence' => $licence,
             'form' => $form

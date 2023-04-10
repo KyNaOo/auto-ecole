@@ -39,6 +39,19 @@ class LicenceRepository extends ServiceEntityRepository
         }
     }
 
+    public function findConflictingLicense(Licence $licence): array
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->where('l.codecategorie = :start_time')
+            ->setParameter('start_time', $licence->getCodecategorie());
+
+        if ($licence->getId()) {
+            $qb->andWhere('l.id != :id')
+                ->setParameter('id', $licence->getId());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 //    /**
 //     * @return Licence[] Returns an array of Licence objects
 //     */

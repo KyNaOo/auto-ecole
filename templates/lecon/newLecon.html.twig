@@ -3,10 +3,28 @@
 {% block title %}New Lecon{% endblock %}
 
 {% block body %}
+    <style>
+        .error-message {
+            background-color: #fce4e4;
+            border: 1px solid #fcc2c3;
+            float: right;
+            padding: 20px 30px;
+        }
+        .error-text {
+            color: #cc0033;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 20px;
+            text-shadow: 1px 1px rgba(250,250,250,.3);
+        }
+    </style>
     {% if app.session.flashbag.has('error') %}
             {% for message in app.session.flashbag.get('error') %}
-                <div class="alert alert-danger">
-                {{ message }}
+                <div class="error-message">
+                    <div class="error-text">
+                        {{ message }}
+                    </div>
                 </div>
             {% endfor %}
     {% endif %}
