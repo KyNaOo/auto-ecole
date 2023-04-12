@@ -20,17 +20,22 @@ Veuillez suivre les étapes :
 
 2. Installer les dépendances via Composer :
 `composer install`
+3. Créer une nouvelle base de donnée :
+`symfony console doctrine:database:create`
 
-3.Créer une nouvelle base de donnée, n'oubliez pas mettre à jour le fichier .env avec vos identifiants de base de donnée et de votre SGBD:
+4. N'oubliez pas de mettre à jour le fichier .env avec vos identifiants de base de donnée et de votre SGBD:
 `DATABASE_URL="mysql://your_name:your_password@127.0.0.1:3306/db_name?serverVersion=your_SGBD&charset=utf8mb4"`
 
-4.Lancer la migration de base de donnée
+5. Lancer la migration de base de donnée
 `php bin/console doctrine:migrations:migrate`
 
-5.Remplissez la base de donnée à l'aide des fixtures 
+6. Remplissez la base de donnée à l'aide des fixtures 
 `symfony console l : d :f`
 
-6.Connectez vous !
+7. N'oubliez pas de renseigner votre MAILER DNS dans le fichier .env, je vous recommande d'utiliser le mailer de mailtrap
+`MAILER_DSN=votre mailer`
+
+8. Connectez vous !
 -Admin, ethanbellaiche0@gmail.com
 -Moniteur, jacob@trabelsi.com
 -Elève, qinhao@wu.com
