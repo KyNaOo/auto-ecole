@@ -413,6 +413,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $resultSet->fetchAllAssociative();
     }
 
+    public function MoniteurDispo(\DateTimeInterface $date)
+    {
+        // Get all users with the "moniteur" role
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%ROLE_MONITEUR%');
+        $moniteurs = $qb->getQuery()->getResult();
+
+        // Check availability for each moniteur
+        $availableMoniteurs = [];
+        foreach ($moniteurs as $moniteur) {
+            $lecons = $moniteur->getLecons();
+            $isAvailable = true;
+            foreach ($lecons as $lecon) {
+                if ($lecon->getDateStart() == $date) {
+                    $isAvailable = false;
+                    break;
+                }
+            }
+            if ($isAvailable) {
+                $availableMoniteurs[] = $moniteur;
+            }
+        }
+
+        return $availableMoniteurs;
+    }
+
 //SELECT um.nom, COUNT(l.id)/2
 //FROM lecon l
 //INNER JOIN lecon_user lu ON lu.lecon_id = l.id

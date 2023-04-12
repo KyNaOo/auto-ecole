@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Lecon;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -90,6 +91,21 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
             ->getResult()
        ;
     }
+
+    public function CheckMoniteur(User $user, \DateTimeInterface $date)
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->select('l')
+            ->where('l.dateStart = :date')
+            ->andWhere(':user MEMBER OF l.codeuser')
+            ->setParameters([
+                'user' => $user,
+                'date' => $date,
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
 
 //    public function findOneBySomeField($value): ?Lecon
 //    {

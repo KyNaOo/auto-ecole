@@ -89,6 +89,35 @@ class UserController extends AbstractController
                     'user' => $user
                 ]);
             }
+            $conflictingLessons = $leconRepository->CheckMoniteur($userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]),$lecon->getDateStart());
+            $dispo=$userRepository->findUsersByRole('ROLE_MONITEUR');
+            $monidispo='';
+            foreach ($dispo as $lemoniteur) {
+                $lalecons = $lemoniteur->getLecons();
+                $isAvailable = true;
+                foreach ($lalecons as $lecon2) {
+                    if ($lecon2->getDateStart() == $lecon->getDateStart()) {
+                        $isAvailable = false;
+                        break;
+                    }
+                }
+                if ($isAvailable) {
+                    $monidispo= $lemoniteur->getPrenom();
+                }
+            }
+            if(empty($monidispo)){
+                $message='Aucun moniteur disponible';
+            }else{
+                $message='Moniteur indisponible, essayer avec'.' '.$monidispo;
+            }
+            if(!empty($conflictingLessons)){
+                $this->addFlash('error',$message);
+                return $this->renderForm('lecon/newLecon.html.twig',[
+                   'lecon'=>$lecon,
+                   'form'=>$form,
+                   'user'=>$user
+                ]);
+            }
         if ($form->isValid()) {
                 $moniteur=$userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]);
                 $lecon->addCodeuser($user);
