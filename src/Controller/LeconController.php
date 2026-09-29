@@ -9,7 +9,7 @@ use App\Repository\LeconRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 
 #[Route('/lecon')]
@@ -36,7 +36,7 @@ class LeconController extends AbstractController
             return $this->redirectToRoute('app_lecon_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('lecon/new.html.twig', [
+        return $this->render('lecon/new.html.twig', [
             'lecon' => $lecon,
             'form' => $form,
         ]);
@@ -62,7 +62,7 @@ class LeconController extends AbstractController
             return $this->redirectToRoute('app_lecon_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('lecon/edit.html.twig', [
+        return $this->render('lecon/edit.html.twig', [
             'lecon' => $lecon,
             'form' => $form,
         ]);

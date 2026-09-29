@@ -9,7 +9,7 @@ use App\Repository\LeconRepository;
 use App\Repository\LicenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EditUserType;
 use App\Repository\UserRepository;
@@ -76,7 +76,7 @@ class MoniteurController extends AbstractController
             $lconflict = $licenceconflict->findConflictingLicenses($licence, $this->getUser()->getId());
             if(!empty($lconflict)){
                 $this->addFlash('error','Vous avez déjà cette licence');
-                return $this->renderForm('moniteur/addLicence.html.twig', [
+                return $this->render('moniteur/addLicence.html.twig', [
                     'lecon' => $licence,
                     'form' => $form,
                     'user' => $user
@@ -90,7 +90,7 @@ class MoniteurController extends AbstractController
                 return $this->redirectToRoute('app_moniteur', [], Response::HTTP_SEE_OTHER);
             }
         }
-        return $this->renderForm('moniteur/addLicence.html.twig', [
+        return $this->render('moniteur/addLicence.html.twig', [
             'licence' => $licence,
             'form' => $form
         ]);
@@ -102,7 +102,7 @@ class MoniteurController extends AbstractController
         // dd($user->getId());
         $lesLicences = $licenceconflict->userLicence($this->getUser()->getId());
 
-        return $this->renderForm('moniteur/showLicence.html.twig', [
+        return $this->render('moniteur/showLicence.html.twig', [
             'licences' => $lesLicences
         ]);
     }

@@ -73,9 +73,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 WHERE u.id = :userId
                 GROUP BY c.libelle";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
 
         return $resultSet->fetchAllAssociative();
@@ -111,9 +109,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
 
@@ -136,9 +132,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 GROUP BY c.libelle";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -157,9 +151,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 WHERE um.id=:userId
                 GROUP BY c.libelle";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -175,9 +167,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
                 WHERE lecon_user.user_id=:userId ";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -194,9 +184,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 WHERE lecon_user.user_id=:userId
                 AND lecon.reglee = 0";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -210,9 +198,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
                 WHERE lecon_user.user_id=:userId";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -227,7 +213,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN lecon ON lecon.codevehicule_id=vehicule.id
                 INNER JOIN lecon_user ON lecon_user.lecon_id=lecon.id
                 WHERE lecon_user.user_id=:userId
-                GROUP BY vehicule.Modele
+                GROUP BY vehicule.id, vehicule.Marque, vehicule.Modele
                 HAVING COUNT(lecon.id)=(
                 SELECT MAX(nb)
                     FROM (SELECT COUNT(lecon.id)AS nb
@@ -248,9 +234,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //                   )
 //AND user_id not like 3
 //GROUP by u.nom;
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -262,9 +246,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $sql = "SELECT COUNT(lecon_user.user_id) as nbLecon FROM lecon_user WHERE lecon_user.user_id=:userId";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -280,9 +262,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 INNER JOIN lecon_user ON lecon_user.lecon_id = lecon.id
                 WHERE lecon_user.user_id=:userId";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -299,9 +279,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 WHERE lecon_user.user_id=:userId
                 GROUP BY categorie.libelle";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery(['userId'=>$userId]);
+        $resultSet = $conn->executeQuery($sql, ['userId'=>$userId]);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -312,9 +290,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 FROM user 
                 WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $conn->executeQuery($sql);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -347,9 +323,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                           WHERE JSON_CONTAINS(user.roles, '\"ROLE_MONITEUR\"')
                           GROUP BY user.id)AS temp)";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $conn->executeQuery($sql);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -362,16 +336,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $sql = "SELECT vehicule.marque, vehicule.modele, COUNT(lecon.id)AS nbLecon
                 FROM vehicule
                 INNER JOIN lecon ON lecon.codevehicule_id = vehicule.id
-                GROUP BY lecon.codevehicule_id
+                GROUP BY vehicule.id, vehicule.marque, vehicule.modele
                 HAVING COUNT(lecon.id)=(
                 SELECT MAX(nb) 
                     FROM (SELECT COUNT(lecon.id)AS nb 
                           FROM lecon
                           GROUP BY lecon.codevehicule_id)AS temp)";
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $conn->executeQuery($sql);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -387,9 +359,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 GROUP BY vehicule.modele";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $conn->executeQuery($sql);
 
         return $resultSet->fetchAllAssociative();
     }
@@ -406,9 +376,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 GROUP BY user.nom";
 //        AND um.roles LIKE '%ROLE_ADMIN%'
 
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
+        $resultSet = $conn->executeQuery($sql);
 
         return $resultSet->fetchAllAssociative();
     }

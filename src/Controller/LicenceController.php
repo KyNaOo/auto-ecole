@@ -8,7 +8,7 @@ use App\Repository\LicenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/licence')]
 class LicenceController extends AbstractController
@@ -34,7 +34,7 @@ class LicenceController extends AbstractController
             return $this->redirectToRoute('app_licence_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('licence/new.html.twig', [
+        return $this->render('licence/new.html.twig', [
             'licence' => $licence,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class LicenceController extends AbstractController
             return $this->redirectToRoute('app_licence_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('licence/edit.html.twig', [
+        return $this->render('licence/edit.html.twig', [
             'licence' => $licence,
             'form' => $form,
         ]);

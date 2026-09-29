@@ -1,117 +1,96 @@
 <?php
 
-namespace App\Test\Controller;
+namespace App\Tests\Controller;
 
 use App\Entity\Categorie;
-use App\Repository\CategorieRepository;
+use App\Tests\Support\EntityFactoryTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class CategorieControllerTest extends WebTestCase
+final class CategorieControllerTest extends WebTestCase
 {
+    use EntityFactoryTrait;
+
     private KernelBrowser $client;
-    private CategorieRepository $repository;
-    private string $path = '/categorie/';
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(Categorie::class);
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->repository->remove($object, true);
-        }
+        $this->client->loginUser($this->createUser('admin@test.fr', ['ROLE_ADMIN']));
     }
 
     public function testIndex(): void
     {
-        $crawler = $this->client->request('GET', $this->path);
+        $this->createCategorie('Moto', 100);
 
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Categorie index');
+        $this->client->request('GET', '/categorie/');
 
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'Liste des categories');
+        self::assertAnySelectorTextContains('td', 'Moto');
     }
 
     public function testNew(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $this->markTestIncomplete();
-        $this->client->request('GET', sprintf('%snew', $this->path));
-
-        self::assertResponseStatusCodeSame(200);
+        $this->client->request('GET', '/categorie/new');
+        self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Save', [
-            'categorie[libelle]' => 'Testing',
-            'categorie[prix]' => 'Testing',
+            'categorie[libelle]' => 'Bateau',
+            'categorie[prix]' => '300.5',
         ]);
 
-        self::assertResponseRedirects('/categorie/');
+        self::assertResponseRedirects('/categorie/', 303);
+        $categorie = $this->em()->getRepository(Categorie::class)->findOneBy(['libelle' => 'Bateau']);
+        self::assertNotNull($categorie);
+        self::assertSame(300.5, $categorie->getPrix());
+    }
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+    public function testNewRefuseUnFormulaireIncomplet(): void
+    {
+        $this->client->request('GET', '/categorie/new');
+
+        $this->client->submitForm('Save', ['categorie[libelle]' => '', 'categorie[prix]' => '']);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertSame(0, $this->em()->getRepository(Categorie::class)->count([]));
     }
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Categorie();
-        $fixture->setLibelle('My Title');
-        $fixture->setPrix('My Title');
+        $categorie = $this->createCategorie('Camion', 85.5);
 
-        $this->repository->add($fixture, true);
+        $this->client->request('GET', '/categorie/'.$categorie->getId());
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Categorie');
-
-        // Use assertions to check that the properties are properly displayed.
+        self::assertResponseIsSuccessful();
+        self::assertAnySelectorTextContains('td', 'Camion');
+        self::assertAnySelectorTextContains('td', '85.5');
     }
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Categorie();
-        $fixture->setLibelle('My Title');
-        $fixture->setPrix('My Title');
+        $id = $this->createCategorie('Auto', 50)->getId();
 
-        $this->repository->add($fixture, true);
-
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
+        $this->client->request('GET', "/categorie/$id/edit");
         $this->client->submitForm('Update', [
-            'categorie[libelle]' => 'Something New',
-            'categorie[prix]' => 'Something New',
+            'categorie[libelle]' => 'Automobile',
+            'categorie[prix]' => '55',
         ]);
 
-        self::assertResponseRedirects('/categorie/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getLibelle());
-        self::assertSame('Something New', $fixture[0]->getPrix());
+        self::assertResponseRedirects('/categorie/', 303);
+        $categorie = $this->em()->find(Categorie::class, $id);
+        self::assertSame('Automobile', $categorie->getLibelle());
+        self::assertSame(55.0, $categorie->getPrix());
     }
 
-    public function testRemove(): void
+    public function testDelete(): void
     {
-        $this->markTestIncomplete();
+        $id = $this->createCategorie('Bus', 200)->getId();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $fixture = new Categorie();
-        $fixture->setLibelle('My Title');
-        $fixture->setPrix('My Title');
-
-        $this->repository->add($fixture, true);
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', "/categorie/$id");
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
-        self::assertResponseRedirects('/categorie/');
+        self::assertResponseRedirects('/categorie/', 303);
+        self::assertNull($this->em()->find(Categorie::class, $id));
     }
 }

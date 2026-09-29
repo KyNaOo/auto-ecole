@@ -8,7 +8,7 @@ use App\Repository\CategorieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/categorie')]
 class CategorieController extends AbstractController
@@ -34,7 +34,7 @@ class CategorieController extends AbstractController
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('categorie/new.html.twig', [
+        return $this->render('categorie/new.html.twig', [
             'categorie' => $categorie,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class CategorieController extends AbstractController
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('categorie/edit.html.twig', [
+        return $this->render('categorie/edit.html.twig', [
             'categorie' => $categorie,
             'form' => $form,
         ]);

@@ -1,45 +1,114 @@
-# BST-SIO-G5-2023-AutoEcole-Web
+# Auto-École Web
 
-#Description
+Application web de gestion d'auto-école (projet BTS SIO 2023), mise à jour en 2026.
 
-Ce projet à été crée avec Symfony CLI 5.4 et php 8.0 avec les fonctionnalités suivantes :
+- **Élève** : s'inscrire, réserver une leçon, consulter son planning et ses statistiques
+- **Moniteur** : ajouter ses licences, consulter son planning et ses statistiques
+- **Admin** : gérer catégories, véhicules, licences et leçons ; créer des moniteurs ; statistiques globales
 
--Page connexion / inscription
--Consulter son planning en tant qu'élève/moniteur
--S'incrire à une leçon en tant qu'elève
--Ajouter une licence en tant que moniteur
--Modifier son mot de passe et profil en tant qu'élève/moniteur
--Accéder au crud de toutes les entités via le rôle admin 
+**Stack** : PHP 8.4 · Symfony 7.4 LTS · Doctrine ORM 3 · MySQL 8.4 · FrankenPHP · PHPUnit 11
 
-#Installation
+---
 
-Veuillez suivre les étapes :
+## Prérequis
 
-1. Cloner le projet
-`git clone git@github.com:ort-montreuil/BST-SIO-G5-2023-AutoEcole-Web.git`
+Uniquement **Docker** avec **Docker Compose** (v2). Rien d'autre à installer : PHP, Composer et MySQL
+tournent dans les conteneurs.
 
-2. Installer les dépendances via Composer :
-`composer install`
-3. Créer une nouvelle base de donnée :
-`symfony console doctrine:database:create`
+## Démarrage
 
-4. N'oubliez pas de mettre à jour le fichier .env avec vos identifiants de base de donnée et de votre SGBD:
-`DATABASE_URL="mysql://your_name:your_password@127.0.0.1:3306/db_name?serverVersion=your_SGBD&charset=utf8mb4"`
+```bash
+git clone git@github.com:ort-montreuil/BST-SIO-G5-2023-AutoEcole-Web.git
+cd BST-SIO-G5-2023-AutoEcole-Web
+docker compose up -d --build
+docker compose logs -f php     # suivre le démarrage (Ctrl+C pour quitter)
+```
 
-5. Lancer la migration de base de donnée
-`php bin/console doctrine:migrations:migrate`
+Au premier lancement, le conteneur `php` installe les dépendances Composer, crée le schéma de la base
+et charge des données de démonstration. C'est prêt quand le log affiche
+`Application disponible sur http://localhost:8000` (1 à 2 minutes la première fois).
 
-6. Remplissez la base de donnée à l'aide des fixtures 
-`symfony console l : d :f`
+| Service         | URL                   | Rôle                                      |
+|-----------------|-----------------------|-------------------------------------------|
+| Application     | http://localhost:8000 | le site                                   |
+| phpMyAdmin      | http://localhost:8080 | explorer la base (connecté en root)       |
+| Mailpit         | http://localhost:8025 | voir les e-mails envoyés par l'appli      |
 
-7. N'oubliez pas de renseigner votre MAILER DNS dans le fichier .env, je vous recommande d'utiliser le mailer de mailtrap
-`MAILER_DSN=votre mailer`
+Aucun e-mail ne part réellement : ils sont tous capturés par Mailpit (ex. confirmation d'inscription).
 
-8. Connectez vous !
--Admin, ethanbellaiche0@gmail.com
--Moniteur, jacob@trabelsi.com
--Elève, qinhao@wu.com
+### Comptes de démonstration
 
-Ils possèdent tous le mot de passe, azerty123
+Mot de passe commun : `azerty123`
 
+| Rôle     | E-mail                    |
+|----------|---------------------------|
+| Admin    | ethanbellaiche0@gmail.com |
+| Moniteur | jacob@trabelsi.com        |
+| Élève    | qinhao@wu.com             |
 
+## Au quotidien
+
+```bash
+docker compose up -d              # démarrer
+docker compose down               # arrêter (les données sont conservées)
+docker compose down -v            # arrêter ET effacer la base (repart de zéro au prochain up)
+
+docker compose exec php bin/console <commande>   # console Symfony
+docker compose exec php composer <commande>      # Composer
+docker compose exec php bin/console doctrine:fixtures:load -n   # réinitialiser les données de démo
+```
+
+Le code est monté dans le conteneur : toute modification de `src/` ou `templates/` est visible
+immédiatement en rechargeant la page.
+
+### Modifier la base de données
+
+Après avoir modifié une entité dans `src/Entity/` :
+
+```bash
+docker compose exec php bin/console make:migration
+docker compose exec php bin/console doctrine:migrations:migrate
+```
+
+## Tests
+
+```bash
+docker compose exec php bin/phpunit              # toute la suite
+docker compose exec php bin/phpunit --testdox    # affichage lisible
+docker compose exec php bin/phpunit tests/Controller/UserControllerTest.php   # un seul fichier
+```
+
+La base `bddautoecoleweb_test` est recréée à partir des migrations à chaque lancement, et chaque test
+s'exécute dans une transaction annulée à la fin (`dama/doctrine-test-bundle`). Les tests sont donc
+indépendants les uns des autres et ne touchent pas aux données de développement.
+
+| Dossier              | Contenu                                                                    |
+|----------------------|----------------------------------------------------------------------------|
+| `tests/Entity`       | tests unitaires des entités (rôles, relations)                             |
+| `tests/Repository`   | requêtes : détection de conflits, statistiques SQL                         |
+| `tests/Controller`   | tests fonctionnels : connexion, droits d'accès, CRUD admin, parcours élève et moniteur, inscription |
+| `tests/Support`      | `EntityFactoryTrait` pour créer des données de test                        |
+
+## Structure du projet
+
+```
+src/
+  Controller/     une classe par espace (User, Moniteur, Admin) + CRUD (Categorie, Vehicule, Licence, Lecon)
+  Entity/         User, Lecon, Licence, Vehicule, Categorie
+  Repository/     requêtes Doctrine et statistiques en SQL
+  Form/           formulaires Symfony
+  DataFixtures/   données de démonstration (Faker)
+templates/        vues Twig, un dossier par contrôleur
+migrations/       migrations Doctrine
+docker/           entrypoint, php.ini, script d'initialisation MySQL
+```
+
+## Dépannage
+
+- **Un port est déjà utilisé** : changez-le au lancement, par ex.
+  `APP_PORT=8001 PMA_PORT=8081 MAILPIT_PORT=8026 docker compose up -d`
+- **Fichiers créés par Docker appartenant à root (Linux)** : si votre UID n'est pas 1000, reconstruisez avec
+  `UID=$(id -u) GID=$(id -g) docker compose up -d --build`
+- **Les tests échouent avec « Access denied … bddautoecoleweb_test »** : la base MySQL a été créée par
+  une version antérieure du projet. Lancez `docker compose down -v && docker compose up -d`.
+- **Repartir complètement de zéro** : `docker compose down -v`, puis `docker compose up -d --build`.

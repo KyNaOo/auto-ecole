@@ -8,7 +8,7 @@ use App\Repository\VehiculeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/vehicule')]
 class VehiculeController extends AbstractController
@@ -34,7 +34,7 @@ class VehiculeController extends AbstractController
             return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('vehicule/new.html.twig', [
+        return $this->render('vehicule/new.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form,
         ]);
@@ -60,7 +60,7 @@ class VehiculeController extends AbstractController
             return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('vehicule/edit.html.twig', [
+        return $this->render('vehicule/edit.html.twig', [
             'vehicule' => $vehicule,
             'form' => $form,
         ]);

@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\String\u;
 
 class UserController extends AbstractController
@@ -83,13 +83,14 @@ class UserController extends AbstractController
             if (!empty($conflictingLessons)) {
                 //$error = "Il y a déjà une leçon à cette date/heure!";
                 $this->addFlash('error','Il y a déjà une leçon à cette date/heure');
-                return $this->renderForm('lecon/newLecon.html.twig', [
+                return $this->render('lecon/newLecon.html.twig', [
                     'lecon' => $lecon,
                     'form' => $form,
                     'user' => $user
                 ]);
             }
-            $conflictingLessons = $leconRepository->CheckMoniteur($userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]),$lecon->getDateStart());
+            $moniteur = $form->get('codeuser')->getData();
+            $conflictingLessons = $moniteur ? $leconRepository->CheckMoniteur($moniteur, $lecon->getDateStart()) : [];
             $dispo=$userRepository->findUsersByRole('ROLE_MONITEUR');
             $monidispo='';
             foreach ($dispo as $lemoniteur) {
@@ -112,21 +113,20 @@ class UserController extends AbstractController
             }
             if(!empty($conflictingLessons)){
                 $this->addFlash('error',$message);
-                return $this->renderForm('lecon/newLecon.html.twig',[
+                return $this->render('lecon/newLecon.html.twig',[
                    'lecon'=>$lecon,
                    'form'=>$form,
                    'user'=>$user
                 ]);
             }
         if ($form->isValid()) {
-                $moniteur=$userRepository->findOneBy(['id'=>$request->request->get('lecon')['codeuser']]);
                 $lecon->addCodeuser($user);
                 $lecon->addCodeuser($moniteur);
                 $leconRepository->save($lecon, true);
                 return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
         }
     }
-        return $this->renderForm('lecon/newLecon.html.twig', [
+        return $this->render('lecon/newLecon.html.twig', [
             'lecon' => $lecon,
             'form' => $form,
             'user'=>$user
@@ -195,7 +195,7 @@ class UserController extends AbstractController
         if (count($result4)>1){
             $boolCountVeh = true;
         }
-        $countVeh = $result4[0]['nbLecon'];
+        $countVeh = $result4[0]['nbLecon'] ?? 0;
         return $this->render('user/stats.html.twig', [
             'prix'=>$prixPermis,
             'prixRestant'=>$prixRestant,

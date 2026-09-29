@@ -7,14 +7,14 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Faker;
-use Faker\Provider\Fakecar;
+use Faker\Provider\FakeCar;
 
 class VehiculeFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
         $faker = \Faker\Factory::create('fr_FR');
-        $faker->addProvider(new \Faker\Provider\Fakecar($faker));
+        $faker->addProvider(new \Faker\Provider\FakeCar($faker));
 
         $categories = $manager->getRepository(\App\Entity\Categorie::class)->findAll();
 

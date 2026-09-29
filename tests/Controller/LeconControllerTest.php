@@ -1,141 +1,104 @@
 <?php
 
-namespace App\Test\Controller;
+namespace App\Tests\Controller;
 
 use App\Entity\Lecon;
-use App\Repository\LeconRepository;
+use App\Entity\User;
+use App\Entity\Vehicule;
+use App\Tests\Support\EntityFactoryTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class LeconControllerTest extends WebTestCase
+final class LeconControllerTest extends WebTestCase
 {
+    use EntityFactoryTrait;
+
     private KernelBrowser $client;
-    private LeconRepository $repository;
-    private string $path = '/lecon/';
+    private User $eleve;
+    private User $moniteur;
+    private Vehicule $vehicule;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(Lecon::class);
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->repository->remove($object, true);
-        }
+        $this->client->loginUser($this->createUser('admin@test.fr', ['ROLE_ADMIN']));
+        $this->eleve = $this->createUser('eleve@test.fr');
+        $this->moniteur = $this->createUser('moniteur@test.fr', ['ROLE_MONITEUR']);
+        $this->vehicule = $this->createVehicule($this->createCategorie());
     }
 
     public function testIndex(): void
     {
-        $crawler = $this->client->request('GET', $this->path);
+        $this->createLecon($this->vehicule, new \DateTime('2030-01-15 10:00'), [$this->eleve, $this->moniteur]);
 
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Lecon index');
+        $this->client->request('GET', '/lecon/');
 
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'Liste de leçon');
     }
 
     public function testNew(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+        $this->client->request('GET', '/lecon/new');
+        $this->client->submitForm('Save', $this->formData('2030-01-15', 10));
 
-        $this->markTestIncomplete();
-        $this->client->request('GET', sprintf('%snew', $this->path));
+        self::assertResponseRedirects('/lecon/', 303);
+        $lecon = $this->em()->getRepository(Lecon::class)->findOneBy([]);
+        self::assertSame('2030-01-15 10:00', $lecon->getDateStart()->format('Y-m-d H:i'));
+        self::assertSame(1, $lecon->getReglee());
+    }
 
-        self::assertResponseStatusCodeSame(200);
+    public function testNewRefuseUneDatePassee(): void
+    {
+        $this->client->request('GET', '/lecon/new');
+        $this->client->submitForm('Save', $this->formData('2020-01-15', 10));
 
-        $this->client->submitForm('Save', [
-            'lecon[date]' => 'Testing',
-            'lecon[heure]' => 'Testing',
-            'lecon[codemoniteur]' => 'Testing',
-            'lecon[codeeleve]' => 'Testing',
-            'lecon[immatriculation]' => 'Testing',
-            'lecon[reglee]' => 'Testing',
-        ]);
-
-        self::assertResponseRedirects('/lecon/');
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        self::assertResponseStatusCodeSame(422);
+        self::assertSelectorTextContains('body', 'Vous ne pouvez pas sélectionner une date antérieure!');
+        self::assertSame(0, $this->em()->getRepository(Lecon::class)->count([]));
     }
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Lecon();
-        $fixture->setDate('My Title');
-        $fixture->setHeure('My Title');
-        $fixture->setCodemoniteur('My Title');
-        $fixture->setCodeeleve('My Title');
-        $fixture->setImmatriculation('My Title');
-        $fixture->setReglee('My Title');
+        $lecon = $this->createLecon($this->vehicule, new \DateTime('2030-01-15 10:00'), [$this->eleve]);
 
-        $this->repository->add($fixture, true);
+        $this->client->request('GET', '/lecon/'.$lecon->getId());
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Lecon');
-
-        // Use assertions to check that the properties are properly displayed.
+        self::assertResponseIsSuccessful();
+        self::assertAnySelectorTextContains('td', '2030-01-15 10:00:00');
     }
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Lecon();
-        $fixture->setDate('My Title');
-        $fixture->setHeure('My Title');
-        $fixture->setCodemoniteur('My Title');
-        $fixture->setCodeeleve('My Title');
-        $fixture->setImmatriculation('My Title');
-        $fixture->setReglee('My Title');
+        $id = $this->createLecon($this->vehicule, new \DateTime('2030-01-15 10:00'), [$this->eleve])->getId();
 
-        $this->repository->add($fixture, true);
+        $this->client->request('GET', "/lecon/$id/edit");
+        $this->client->submitForm('Update', $this->formData('2030-02-20', 14));
 
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'lecon[date]' => 'Something New',
-            'lecon[heure]' => 'Something New',
-            'lecon[codemoniteur]' => 'Something New',
-            'lecon[codeeleve]' => 'Something New',
-            'lecon[immatriculation]' => 'Something New',
-            'lecon[reglee]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/lecon/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getDate());
-        self::assertSame('Something New', $fixture[0]->getHeure());
-        self::assertSame('Something New', $fixture[0]->getCodemoniteur());
-        self::assertSame('Something New', $fixture[0]->getCodeeleve());
-        self::assertSame('Something New', $fixture[0]->getImmatriculation());
-        self::assertSame('Something New', $fixture[0]->getReglee());
+        self::assertResponseRedirects('/lecon/', 303);
+        self::assertSame('2030-02-20 14:00', $this->em()->find(Lecon::class, $id)->getDateStart()->format('Y-m-d H:i'));
     }
 
-    public function testRemove(): void
+    public function testDelete(): void
     {
-        $this->markTestIncomplete();
+        $id = $this->createLecon($this->vehicule, new \DateTime('2030-01-15 10:00'), [$this->eleve])->getId();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $fixture = new Lecon();
-        $fixture->setDate('My Title');
-        $fixture->setHeure('My Title');
-        $fixture->setCodemoniteur('My Title');
-        $fixture->setCodeeleve('My Title');
-        $fixture->setImmatriculation('My Title');
-        $fixture->setReglee('My Title');
-
-        $this->repository->add($fixture, true);
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', "/lecon/$id");
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
-        self::assertResponseRedirects('/lecon/');
+        self::assertResponseRedirects('/lecon/', 303);
+        self::assertNull($this->em()->find(Lecon::class, $id));
+    }
+
+    private function formData(string $date, int $heure): array
+    {
+        return [
+            'lecon[dateStart][date]' => $date,
+            'lecon[dateStart][time][hour]' => (string) $heure,
+            'lecon[dateStart][time][minute]' => '0',
+            'lecon[codevehicule]' => (string) $this->vehicule->getId(),
+            'lecon[reglee]' => '1',
+            'lecon[codeuser]' => (string) $this->moniteur->getId(),
+        ];
     }
 }

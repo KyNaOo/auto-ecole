@@ -40,20 +40,6 @@ class LeconRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByUser(int $idUser){
-        $conn = $this->getEntityManager()->getConnection();
-
-        $sql = "select distinct lecon.id, lecon.codevehicule_id, lecon.reglee, lecon.date_end, lecon.date_start  from bddautoecoleweb.lecon, lecon_user, user
-where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
-
-        $stmt = $conn->prepare($sql);
-
-        $resultSet = $stmt->executeQuery();
-
-
-        return $resultSet->fetchAllAssociative();
-    }
-
     public function findConflictingLessons(Lecon $lesson, int $userId): array
     {
         $qb = $this->createQueryBuilder('l')
@@ -98,10 +84,8 @@ where lecon_user.user_id=$idUser and lecon_user.lecon_id=lecon.id";
         $qb->select('l')
             ->where('l.dateStart = :date')
             ->andWhere(':user MEMBER OF l.codeuser')
-            ->setParameters([
-                'user' => $user,
-                'date' => $date,
-            ]);
+            ->setParameter('user', $user)
+            ->setParameter('date', $date);
 
         return $qb->getQuery()->getResult();
     }

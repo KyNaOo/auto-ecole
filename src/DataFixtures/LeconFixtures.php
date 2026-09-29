@@ -36,9 +36,9 @@ class LeconFixtures extends Fixture implements OrderedFixtureInterface
         $nbLecons = 0;
         while ($nbLecons < 100) {
             $lecon = new Lecon();
-            $lecon->setHeure($hours[array_rand($hours)])
+            [$heure, $minute] = explode(':', $hours[array_rand($hours)]);
+            $lecon->setDateStart($faker->dateTimeBetween('-2 years', '+1 years')->setTime((int) $heure, (int) $minute))
                 ->setCodevehicule($vehicules[array_rand($vehicules)])
-                ->setDate($faker->dateTimeBetween('-2 years', '+1 years'))
                 ->setReglee($faker->numberBetween(0, 1))
             ;
             $lecon->addCodeuser($moniteurs[array_rand($moniteurs)]);
@@ -48,7 +48,7 @@ class LeconFixtures extends Fixture implements OrderedFixtureInterface
         }
     }
 
-    public function getOrder()
+    public function getOrder(): int
     {
         return 5;
     }

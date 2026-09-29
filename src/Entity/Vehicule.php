@@ -6,6 +6,7 @@ use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 class Vehicule
@@ -16,19 +17,24 @@ class Vehicule
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $immatriculation = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $marque = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $modele = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $annee = null;
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?Categorie $codecategorie = null;
 
     #[ORM\OneToMany(mappedBy: 'codevehicule', targetEntity: Lecon::class)]

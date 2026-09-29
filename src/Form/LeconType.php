@@ -7,7 +7,6 @@ use App\Entity\Lecon;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,7 +27,7 @@ class LeconType extends AbstractType
                 'time_widget'=>'choice',
                 'hours'=> range(8,17),
                 'constraints'=>[
-                    new GreaterThanOrEqual(['value'=>'today','message'=>'Vous ne pouvez pas sélectionner une date antérieure!'])
+                    new GreaterThanOrEqual(value: 'today', message: 'Vous ne pouvez pas sélectionner une date antérieure!')
                 ],
                 'data'=>(new \DateTime())->setTime(8,0)
             ])

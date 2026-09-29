@@ -19,7 +19,8 @@ class LicenceType extends AbstractType
             ->add('codecategorie',null, [
                 'label' => 'Catégorie'])
 
-            ->add('dateobtention', DateType::Class, array(
+            ->add('dateobtention', DateType::class, array(
+                'widget' => 'choice',
                 'years' => range(date('Y'), date('Y')-50),
                 'label' => 'Date d\'obtention'))
 

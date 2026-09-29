@@ -3,11 +3,12 @@
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class User extends Fixture
+class User extends Fixture implements OrderedFixtureInterface
 {
     private UserPasswordHasherInterface $hasher;
 
@@ -35,11 +36,11 @@ class User extends Fixture
                 ->setVille($faker->city)
                 ->setCodepostale($faker->valid($validPostCode)->postcode)
                 ->setTelephone($faker->e164PhoneNumber)
-                ->setSexe($faker->numberBetween(0, 2))
+                ->setSexe($faker->randomElement(['Femme', 'Homme', 'Autre', 'Ne se prononce pas']))
             ;
             $user->setPassword($this->hasher->hashPassword($user, $faker->password));
             $user->setRoles((array)$roles[random_int(0, 1)]);
-            $user->setIsVerified(random_int(0, 1));
+            $user->setIsVerified((bool) random_int(0, 1));
             $manager->persist($user);
             ++$count;
         }

@@ -39,30 +39,6 @@ class Lecon
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getHeure(): ?string
-    {
-        return $this->heure;
-    }
-
-    public function setHeure(string $heure): self
-    {
-        $this->heure = $heure;
-
-        return $this;
-    }
-
     public function getReglee(): ?int
     {
         return $this->reglee;

@@ -1,135 +1,98 @@
 <?php
 
-namespace App\Test\Controller;
+namespace App\Tests\Controller;
 
+use App\Entity\Categorie;
 use App\Entity\Vehicule;
-use App\Repository\VehiculeRepository;
+use App\Tests\Support\EntityFactoryTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class VehiculeControllerTest extends WebTestCase
+final class VehiculeControllerTest extends WebTestCase
 {
+    use EntityFactoryTrait;
+
     private KernelBrowser $client;
-    private VehiculeRepository $repository;
-    private string $path = '/vehicule/';
+    private Categorie $categorie;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(Vehicule::class);
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->repository->remove($object, true);
-        }
+        $this->client->loginUser($this->createUser('admin@test.fr', ['ROLE_ADMIN']));
+        $this->categorie = $this->createCategorie('Automobile');
     }
 
     public function testIndex(): void
     {
-        $crawler = $this->client->request('GET', $this->path);
+        $this->createVehicule($this->categorie, 'Peugeot', '208');
 
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Vehicule index');
+        $this->client->request('GET', '/vehicule/');
 
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'Vehicule index');
+        self::assertAnySelectorTextContains('td', 'Peugeot');
     }
 
     public function testNew(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $this->markTestIncomplete();
-        $this->client->request('GET', sprintf('%snew', $this->path));
-
-        self::assertResponseStatusCodeSame(200);
-
+        $this->client->request('GET', '/vehicule/new');
         $this->client->submitForm('Save', [
-            'vehicule[immatriculation]' => 'Testing',
-            'vehicule[marque]' => 'Testing',
-            'vehicule[modele]' => 'Testing',
-            'vehicule[annee]' => 'Testing',
-            'vehicule[codecategorie]' => 'Testing',
+            'vehicule[immatriculation]' => 'EF-456-GH',
+            'vehicule[marque]' => 'Citroën',
+            'vehicule[modele]' => 'C3',
+            'vehicule[annee]' => '2021',
+            'vehicule[codecategorie]' => (string) $this->categorie->getId(),
         ]);
 
-        self::assertResponseRedirects('/vehicule/');
+        self::assertResponseRedirects('/vehicule/', 303);
+        $vehicule = $this->em()->getRepository(Vehicule::class)->findOneBy(['immatriculation' => 'EF-456-GH']);
+        self::assertNotNull($vehicule);
+        self::assertSame('C3', $vehicule->getModele());
+        self::assertSame($this->categorie->getId(), $vehicule->getCodecategorie()->getId());
+    }
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+    public function testNewRefuseUnFormulaireIncomplet(): void
+    {
+        $this->client->request('GET', '/vehicule/new');
+
+        $this->client->submitForm('Save', ['vehicule[immatriculation]' => '', 'vehicule[marque]' => '']);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertSame(0, $this->em()->getRepository(Vehicule::class)->count([]));
     }
 
     public function testShow(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Vehicule();
-        $fixture->setImmatriculation('My Title');
-        $fixture->setMarque('My Title');
-        $fixture->setModele('My Title');
-        $fixture->setAnnee('My Title');
-        $fixture->setCodecategorie('My Title');
+        $vehicule = $this->createVehicule($this->categorie, 'Toyota', 'Yaris');
 
-        $this->repository->add($fixture, true);
+        $this->client->request('GET', '/vehicule/'.$vehicule->getId());
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Vehicule');
-
-        // Use assertions to check that the properties are properly displayed.
+        self::assertResponseIsSuccessful();
+        self::assertAnySelectorTextContains('td', 'Yaris');
+        self::assertAnySelectorTextContains('td', 'Automobile');
     }
 
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Vehicule();
-        $fixture->setImmatriculation('My Title');
-        $fixture->setMarque('My Title');
-        $fixture->setModele('My Title');
-        $fixture->setAnnee('My Title');
-        $fixture->setCodecategorie('My Title');
+        $id = $this->createVehicule($this->categorie)->getId();
 
-        $this->repository->add($fixture, true);
+        $this->client->request('GET', "/vehicule/$id/edit");
+        $this->client->submitForm('Update', ['vehicule[modele]' => 'Megane', 'vehicule[annee]' => '2023']);
 
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'vehicule[immatriculation]' => 'Something New',
-            'vehicule[marque]' => 'Something New',
-            'vehicule[modele]' => 'Something New',
-            'vehicule[annee]' => 'Something New',
-            'vehicule[codecategorie]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/vehicule/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getImmatriculation());
-        self::assertSame('Something New', $fixture[0]->getMarque());
-        self::assertSame('Something New', $fixture[0]->getModele());
-        self::assertSame('Something New', $fixture[0]->getAnnee());
-        self::assertSame('Something New', $fixture[0]->getCodecategorie());
+        self::assertResponseRedirects('/vehicule/', 303);
+        $vehicule = $this->em()->find(Vehicule::class, $id);
+        self::assertSame('Megane', $vehicule->getModele());
+        self::assertSame(2023, $vehicule->getAnnee());
     }
 
-    public function testRemove(): void
+    public function testDelete(): void
     {
-        $this->markTestIncomplete();
+        $id = $this->createVehicule($this->categorie)->getId();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $fixture = new Vehicule();
-        $fixture->setImmatriculation('My Title');
-        $fixture->setMarque('My Title');
-        $fixture->setModele('My Title');
-        $fixture->setAnnee('My Title');
-        $fixture->setCodecategorie('My Title');
-
-        $this->repository->add($fixture, true);
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
+        $this->client->request('GET', "/vehicule/$id");
         $this->client->submitForm('Delete');
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
-        self::assertResponseRedirects('/vehicule/');
+        self::assertResponseRedirects('/vehicule/', 303);
+        self::assertNull($this->em()->find(Vehicule::class, $id));
     }
 }

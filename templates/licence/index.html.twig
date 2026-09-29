@@ -20,7 +20,7 @@
         <tbody>
         {% for licence in licences %}
             <tr>
-                <td>{{ licence.codeuser }}</td>
+                <td>{{ licence.codeuser ? licence.codeuser.prenom ~ ' ' ~ licence.codeuser.nom }}</td>
                 <td>{{ licence.codecategorie }}</td>
                 <td>{{ licence.dateobtention ? licence.dateobtention|date('Y-m-d') : '' }}</td>
                 <td>

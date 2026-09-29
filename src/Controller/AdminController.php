@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
@@ -53,8 +53,8 @@ class AdminController extends AbstractController
         if (count($result2)>1){
             $boolVeh = true;
         }
-        $nbUseMono = $result1[0]['nbLecon'];
-        $nbUseVeh = $result2[0]['nbLecon'];
+        $nbUseMono = $result1[0]['nbLecon'] ?? 0;
+        $nbUseVeh = $result2[0]['nbLecon'] ?? 0;
 
         return $this->render('admin/statsAdmin.html.twig', [
             'moniteurs'=>$result1,
